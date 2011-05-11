@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Untitled Document</title>
+		<script src="js/Game.js"></script>
+		<script src="js/World.js"></script>
+		<script>
+			window.onload = function(){
+				var g = new Game();
+				g.start( document.getElementById( "game" ) );
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id="game"></canvas>
+	</body>
+</html>
