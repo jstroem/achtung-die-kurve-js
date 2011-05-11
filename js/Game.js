@@ -1,14 +1,14 @@
 /**
  * @author Jesper
  * @classDescription
- * 		Constructor { canvasDOM } c
+ * 		Constructor {  HTMLCanvasElement } c
  */
 function Game ( c ) {
 	var world, canvas;
 	
 	function start ( c ) {
 		canvas = c;
-		world = new World( window, c );
+		world = new World( c );
 	}
 	
 	start ( c );

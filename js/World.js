@@ -1,22 +1,35 @@
 /**
  * @author Jesper
  * @classDescription
- * 		Constructor ( { window } w, { canvasDOM } c )
+ * 		Constructor ( { HTMLCanvasElement } c )
  * 		Methods:
  * 			isTileBlocked ( int row, int col )
  * 			blockTile ( int row, int col, Curve c )	
  */
 
-function World ( w, c ) {
+function World ( c ) {
+	var options = {
+		height: 500,
+		width: 500,
+		rows: 250,
+		cols: 250,
+		background: "#000000"
+	}, context, canvas;
 	/**
 	 * @method init the method to be called when the world is initialized.
 	 * @private
 	 * @return void
-	 * @param { window } w
-	 * @param { canvasDOM } c
+	 * @param {  HTMLCanvasElement } c 
 	 */
-	function init ( w, c ) {
+	this.init = function ( c ) {
+		canvas = c;
+		context = c.getContext( "2d" );
 		
+		canvas.height = options.height;
+		canvas.width = options.width;
+		var self = this;
+		console.log(self);
+		window.setInterval( self.run, 1000 / 60 );
 	};
 	
 	/** 
@@ -24,7 +37,12 @@ function World ( w, c ) {
 	 * @private;
 	 * @return void
 	 */
-	function run ( ) { };
+	this.run = function()  {
+		
+		//Draw background
+		 context.fillStyle = options.background;
+		 context.fillRect( 0, 0, options.height, options.width );
+	};
 	
 	/**
 	 * @method isTileBlocked should check if a tile is occupied by another object.
@@ -47,5 +65,5 @@ function World ( w, c ) {
 		
 	};
 	
-	init( w, c );
+	this.init( c );
 };
