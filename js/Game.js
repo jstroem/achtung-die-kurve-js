@@ -9,6 +9,7 @@ function Game ( c ) {
 	function start ( c ) {
 		canvas = c;
 		world = new World( window, c );
+		// abc
 	}
 	
 	start ( c );
