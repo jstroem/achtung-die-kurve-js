@@ -1,14 +1,15 @@
 /**
  * @author Jesper
+ * @classDescription
+ * 		Constructor { canvasDOM } c
  */
-var Game = {
-	world: null,
-	canvas: null,
+function Game ( c ) {
+	var world, canvas;
 	
-	start: function ( c ) {
-		this.canvas = c;
-		var world = new World( );
-		world.init ( window, c );
-		this.world = world;
+	function start ( c ) {
+		canvas = c;
+		world = new World( window, c );
 	}
+	
+	start ( c );
 };

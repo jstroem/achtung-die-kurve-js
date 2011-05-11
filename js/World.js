@@ -1,29 +1,30 @@
 /**
  * @author Jesper
  * @classDescription
+ * 		Constructor ( { window } w, { canvasDOM } c )
  * 		Methods:
- *	 		run
- * 			init ( { window } w, { canvasDOM } c )
  * 			isTileBlocked ( int row, int col )
  * 			blockTile ( int row, int col, Curve c )	
  */
 
-var World = {
+function World ( w, c ) {
 	/**
 	 * @method init the method to be called when the world is initialized.
+	 * @private
 	 * @return void
 	 * @param { window } w
 	 * @param { canvasDOM } c
 	 */
-	init: function( w, c ) {
-		console.log("TESTING");
-	},
+	function init ( w, c ) {
+		
+	};
 	
 	/** 
 	 * @method run the function which is called on every repainting.
+	 * @private;
 	 * @return void
 	 */
-	run: function ( ) { },
+	function run ( ) { };
 	
 	/**
 	 * @method isTileBlocked should check if a tile is occupied by another object.
@@ -31,9 +32,9 @@ var World = {
 	 * @param row the row to check
 	 * @param col the col to check
 	 */
-	isTileBlocked: function ( row, col ) {
-		return null;
-	},
+	this.isTileBlocked = function ( row, col ) {
+		return false;
+	};
 	
 	/**
 	 * @method blockTile should block a tile if it is possible.
@@ -42,7 +43,9 @@ var World = {
 	 * @param col the col to block
 	 * @param { curve } c the curve to block the tile with.
 	 */
-	blockTile: function( row, col, c ) {
+	this.blockTile = function ( row, col, c ) {
 		
-	}
+	};
+	
+	init( w, c );
 };
