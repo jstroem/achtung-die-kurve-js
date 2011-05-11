@@ -1,7 +1,7 @@
 /**
  * @author Jesper
  * @classDescription
- * 		Constructor {  HTMLCanvasElement } c
+ * 		Constructor {  HTMLCanvasElement } cC
  */
 function Game ( c ) {
 	var world, canvas;
