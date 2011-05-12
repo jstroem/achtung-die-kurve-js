@@ -23,12 +23,12 @@ function Curve ( color, pos, keys ) {
 	 * @return void
 	 */
 	function init ( ) {
-		eventHandler.addEvent( "document.onkeydown", function( e ) {
+		addEvent( document, 'keydown', function( e ) {
 			keyPressHandler( true, getKeyCode( e ) );
-		});
-		eventHandler.addEvent( "document.onkeyup", function( e ) {
+		}, false );
+		addEvent( document, 'keyup', function( e ) {
 			keyPressHandler( false, getKeyCode( e ) );
-		});
+		}, false );
 	};
 	
 	/**
