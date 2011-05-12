@@ -1,19 +1,21 @@
 /**
  * @author Jesper & Christoffer
  * @classDescription Represents a Curve.
- * @constructor { String } color, { Vector } dir
+ * @constructor { String } color, { Vector } dir, { left, right } keys
  * @methods
  * 		-
  */
-function Curve ( color, pos ) {
+function Curve ( color, pos, keys ) {
 	var self   = this, // To be used in private-methods.
-		options = {
+		dirOptions = {
+			currentDir: new Vector( 0, 1 ),
+			turnLeft: false,
+			turnRight: false,
 			turningRadians: 0.1
 		};
 	
 	this.color = color,
-	this.pos = pos,
-	this.dir = new Vector( 0, 1 );
+	this.pos = pos;
 	
 	/**
 	 * @private
@@ -21,21 +23,25 @@ function Curve ( color, pos ) {
 	 * @return void
 	 */
 	function init ( ) {
-		document.onkeypress = keyPressHandler;
+		document.onkeydown = function( e ) {
+			keyPressHandler( true, getKeyCode( e ) );
+		};
+		document.onkeyup = function( e ) {
+			keyPressHandler( false, getKeyCode( e ) );
+		};
 	};
 	
 	/**
 	 * @private
 	 * @method Handles user interaction with curve.
-	 * @param e
+	 * @param { boolean } down, { int } keyCode
 	 * @return void
 	 */
-	function keyPressHandler ( e ) {
-		var keyCode = getKeyCode( e );
-		if ( keyCode == 97 ) { // 97 = A
-			self.dir.turnRadians( -options.turningRadians );
-		} else if ( keyCode == 100 ) { // 100 = D
-			self.dir.turnRadians( options.turningRadians );
+	function keyPressHandler ( down, keyCode ) {
+		if ( keyCode == keys.left ) {
+			dirOptions.turnLeft = down;
+		} else if ( keyCode == keys.right ) {
+			dirOptions.turnRight = down;
 		}
 	};
 	
@@ -45,8 +51,15 @@ function Curve ( color, pos ) {
 	 * @return void
 	 */
 	this.move = function ( ) {
-		this.pos.x += this.dir.x;
-		this.pos.y -= this.dir.y; // - because canvas upper left corner is (0, 0)
+		if ( dirOptions.turnLeft ) {
+			dirOptions.currentDir.turnRadians( -dirOptions.turningRadians );
+		}
+		if ( dirOptions.turnRight ) {
+			dirOptions.currentDir.turnRadians( dirOptions.turningRadians );
+		}
+		
+		this.pos.x += dirOptions.currentDir.x;
+		this.pos.y -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
 	};
 	
 	init ( );
