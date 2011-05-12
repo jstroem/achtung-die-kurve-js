@@ -1,15 +1,23 @@
 /**
- * @author Jesper
- * @classDescription
- * 		Constructor {  HTMLCanvasElement } cC
+ * @author Jesper & Christoffer
+ * @classDescription Represents a Curve-game.
+ * @constructor { HTMLCanvasElement } canvasDOM
+ * @methods
+ * 		void addCurve ( Curve curve )
  */
-function Game ( c ) {
-	var world, canvas;
+function Game ( canvasDOM ) {
+	var self   = this, // To be used in private-methods.
+		world  = new World ( this, canvasDOM );
 	
-	function start ( c ) {
-		canvas = c;
-		world = new World( c );
-	}
+	this.curves = new Array ( ); // No need for a specific data-structure so far.
 	
-	start ( c );
+	/**
+	 * @public
+	 * @method Adds a curve to the world.
+	 * @return void
+	 * @param { Curve } curve
+	 */
+	this.addCurve = function ( curve ) {
+		this.curves.push ( curve );
+	};
 };

@@ -2,12 +2,15 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-		<title>Untitled Document</title>
-		<script src="js/Game.js"></script>
-		<script src="js/World.js"></script>
-		<script>
+		<title>Achtung die Kurve!</title>
+		<script src="js/Game.js" type="text/javascript"></script>
+		<script src="js/World.js" type="text/javascript"></script>
+		<script src="js/Curve.js" type="text/javascript"></script>
+		<script src="js/Vector.js" type="text/javascript"></script>
+		<script type="text/javascript">
 			window.onload = function(){
 				var g = new Game( document.getElementById( "game" ) );
+				g.addCurve( new Curve( "#FF0000", new Vector( 250, 250 ) ) );
 			}
 		</script>
 	</head>
