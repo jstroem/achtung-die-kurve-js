@@ -45,7 +45,7 @@ function EventHandler () {
 	 * @param { function } func
 	 */
 	this.addEvent = function ( eventName, func ) {
-		events[eventName].push( func );
+		events[ eventName ].push( func );
 	};
 	
 	/*

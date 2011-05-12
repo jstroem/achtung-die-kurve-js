@@ -8,16 +8,16 @@
  */
 
 function World ( game, canvasDOM ) {
-	var self    = this, // To be used in private-methods.
+	var self = this, // To be used in private-methods.
 		context = canvasDOM.getContext( "2d" ),
 		options = {
 			height: 500,
 			width: 500,
-			rows: 250,
-			cols: 250,
+			curveRadio: 2,
 			background: "#000000",
 			fps: 60
-		};
+		},
+		pixelArray = [];
 	
 	/**
 	 * @private
@@ -42,17 +42,17 @@ function World ( game, canvasDOM ) {
 	 * @return void
 	 */
 	function run ( ) {
-		
-		// Draw background
+		var curve = null;
+		//call each curve to make them move.
 		for ( i in game.curves ) {
-			var curve = game.curves[i];
+			curve = game.curves[i];
 			
 			curve.move();
 			
 			// Draw a circle
 			context.beginPath();
 			context.fillStyle = curve.color;
-			context.arc( curve.pos.x, curve.pos.y, 2, 0, Math.PI*2, true ); 
+			context.arc( curve.pos.x, curve.pos.y, options.curveRadio, 0, Math.PI * options.curveRadio, true ); 
 			context.closePath();
 			context.fill();
 		}
