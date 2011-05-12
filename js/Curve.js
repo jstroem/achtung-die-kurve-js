@@ -6,7 +6,7 @@
  * 		-
  */
 function Curve ( color, pos, keys ) {
-	var self   = this, // To be used in private-methods.
+	var self = this, // To be used in private-methods.
 		dirOptions = {
 			currentDir: new Vector( 0, 1 ),
 			turnLeft: false,
@@ -23,6 +23,7 @@ function Curve ( color, pos, keys ) {
 	 * @return void
 	 */
 	function init ( ) {
+		// To do: Use an event handler, so that multiple users are possible
 		document.onkeydown = function( e ) {
 			keyPressHandler( true, getKeyCode( e ) );
 		};
