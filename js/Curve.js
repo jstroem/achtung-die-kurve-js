@@ -23,13 +23,12 @@ function Curve ( color, pos, keys ) {
 	 * @return void
 	 */
 	function init ( ) {
-		// To do: Use an event handler, so that multiple users are possible
-		document.onkeydown = function( e ) {
+		eventHandler.addEvent( "document.onkeydown", function( e ) {
 			keyPressHandler( true, getKeyCode( e ) );
-		};
-		document.onkeyup = function( e ) {
+		});
+		eventHandler.addEvent( "document.onkeyup", function( e ) {
 			keyPressHandler( false, getKeyCode( e ) );
-		};
+		});
 	};
 	
 	/**
