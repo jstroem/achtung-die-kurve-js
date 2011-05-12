@@ -22,4 +22,4 @@ function Vector ( x, y ) {
 		this.y = this.y * Math.cos( theta ) - this.x * Math.sin ( theta );
 		this.x = newX;
 	};
-};
+}

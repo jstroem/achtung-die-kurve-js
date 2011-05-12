@@ -1,7 +1,7 @@
 /**
  * @author Jesper & Christoffer
  * @classDescription Represents a Curve.
- * @constructor { String } color, { Vector } dir, { left, right } keys
+ * @constructor { String } color, { Point } pos, { left, right } keys
  * @methods
  * 		-
  */
@@ -14,8 +14,7 @@ function Curve ( color, pos, keys ) {
 			turningRadians: 0.1
 		};
 	
-	this.color = color,
-	this.pos = pos;
+	this.color = color;
 	
 	/**
 	 * @private
@@ -46,7 +45,7 @@ function Curve ( color, pos, keys ) {
 	};
 	
 	/**
-	 * @private
+	 * @public
 	 * @method Is run on every redraw.
 	 * @return void
 	 */
@@ -58,8 +57,10 @@ function Curve ( color, pos, keys ) {
 			dirOptions.currentDir.turnRadians( dirOptions.turningRadians );
 		}
 		
-		this.pos.x += dirOptions.currentDir.x;
-		this.pos.y -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
+		pos.row -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
+		pos.col += dirOptions.currentDir.x;
+		
+		return new Point ( parseInt( pos.row ), parseInt( pos.col ) );
 	};
 	
 	init ( );

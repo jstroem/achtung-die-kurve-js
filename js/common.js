@@ -3,8 +3,7 @@ function addEvent ( element, eventName, func, useCapture ) {
 		element.addEventListener( eventName, func, useCapture ); 
 		return true; 
 	} else if ( element.attachEvent ) { 
-		var r = element.attachEvent( 'on' + eventName, func ); 
-		return r;
+		return element.attachEvent( 'on' + eventName, func );
 	} else {
 		element[ 'on' + eventName ] = func;
 	}

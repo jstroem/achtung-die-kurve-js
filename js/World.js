@@ -13,11 +13,11 @@ function World ( game, canvasDOM ) {
 		options = {
 			height: 500,
 			width: 500,
-			rows: 250,
-			cols: 250,
+			pxPerTile: 2,
 			background: "#000000",
 			fps: 60
-		};
+		},
+		blockedTiles = new Array( );
 	
 	/**
 	 * @private
@@ -26,6 +26,12 @@ function World ( game, canvasDOM ) {
 	 * @param {  HTMLCanvasElement } c 
 	 */
 	function init ( ) {
+		// Initialize data structures
+		for ( var i = 0; i < options.height; i++ ) {
+			blockedTiles.push( new Array( ) ); // for each pixel in height: add array for a row
+		}
+		
+		// Initialize DOM
 		canvasDOM.height = options.height;
 		canvasDOM.width = options.width;
 		
@@ -47,12 +53,17 @@ function World ( game, canvasDOM ) {
 		for ( i in game.curves ) {
 			var curve = game.curves[i];
 			
-			curve.move();
+			var pos = curve.move();
+			if (!isTileBlocked(pos)) {
+				blockTile(pos);
+			} else {
+				alert("BLOCKED"); // TO DO: Errors with the blocked, because integers are too grain
+			}
 			
 			// Draw a circle
 			context.beginPath();
 			context.fillStyle = curve.color;
-			context.arc( curve.pos.x, curve.pos.y, 2, 0, Math.PI*2, true ); 
+			context.arc( pos.col, pos.row, 2, 0, Math.PI * 2, true ); 
 			context.closePath();
 			context.fill();
 		}
@@ -62,24 +73,21 @@ function World ( game, canvasDOM ) {
 	 * @public
 	 * @method isTileBlocked should check if a tile is occupied by another object.
 	 * @return boolean
-	 * @param row the row to check
-	 * @param col the col to check
+	 * @param { Point } pos, the position (row, col) to check
 	 */
-	this.isTileBlocked = function ( row, col ) {
-		return false;
-	};
+	function isTileBlocked ( pos ) {
+		return blockedTiles[ pos.row - 1 ][ pos.col - 1];
+	}
 	
 	/**
-	 * @public
+	 * @private
 	 * @method blockTile should block a tile if it is possible.
 	 * @return void
-	 * @param row the row to block
-	 * @param col the col to block
-	 * @param { curve } curve the curve to block the tile with.
+	 * @param { Point } pos, the position (row, col) to block
 	 */
-	this.blockTile = function ( row, col, curve ) {
-		
-	};
+	function blockTile ( pos ) {
+		blockedTiles[ pos.row - 1 ][ pos.col - 1] = true;
+	}
 	
 	init( );
 };

@@ -3,18 +3,19 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Achtung die Kurve!</title>
-		<script src="js/EventHandler.js" type="text/javascript"></script>
+		<script src="js/common.js" type="text/javascript"></script>
 		<script src="js/Game.js" type="text/javascript"></script>
 		<script src="js/World.js" type="text/javascript"></script>
 		<script src="js/Curve.js" type="text/javascript"></script>
 		<script src="js/Vector.js" type="text/javascript"></script>
+		<script src="js/Point.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			addEvent( window, 'load', function() {
 				var g = new Game( document.getElementById( "game" ) );
 				g.addCurve(
 					new Curve(
 						"#FF0000",
-						new Vector( 375, 250 ),
+						new Point( 375, 250 ),
 						{
 							left: 37, // left-arrow
 							right: 39 // right-arrow
@@ -24,7 +25,7 @@
 				g.addCurve(
 					new Curve(
 						"#FF0000",
-						new Vector( 125, 250 ),
+						new Point( 125, 250 ),
 						{
 							left: 65, // A
 							right: 68 // D
