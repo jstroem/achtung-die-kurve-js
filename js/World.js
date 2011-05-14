@@ -71,13 +71,7 @@ function World ( game, canvasDOM ) {
 				blockTile( pos );
 			} else if ( !pos.equals( lastpos, false ) ) {
 				// Draw a rectangle
-				var rectSize = options.curveRadius + 4;
-				
-				context.beginPath( );
-				context.fillStyle = "#ffffff";
-				context.fillRect( pos.col - rectSize / 2, pos.row - rectSize / 2, rectSize, rectSize );  
-				context.closePath( );
-				context.fill( );
+				drawRectangle( pos, options.curveRadius + 4, context );
 				
 				// Kill
 				curvesToKill.push( i );
@@ -154,7 +148,7 @@ function testDataStructure(options, ds) {
 			if ( ds[ r ] && ds[ r ][ c ] && ds[ r ][ c ] == true ) {
 				context2.beginPath( );
 				context2.fillStyle = "#ffffff";
-				context2.fillRect( c, r, 1, 1 ); 
+				context2.fillRect( c, r, 1, 1 );  
 				context2.closePath( );
 				context2.fill( );
 			}

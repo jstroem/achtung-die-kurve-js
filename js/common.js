@@ -8,6 +8,14 @@ function drawCircle( pos, radius, color, context ) {
 	context.fill( );
 }
 
+function drawRectangle( pos, size, color, context ) {
+	context.beginPath( );
+	context.fillStyle = color;
+	context.fillRect( pos.col - size / 2, pos.row - size / 2, size, size );  
+	context.closePath( );
+	context.fill( );
+}
+
 // EVENT
 
 function addEvent( element, eventName, func, useCapture ) {
