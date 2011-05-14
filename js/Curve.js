@@ -14,7 +14,8 @@ function Curve ( color, pos, keys ) {
 			turningRadians: 0.1
 		};
 	
-	this.color = color;
+	this.color = color,
+	this.pos   = pos;
 	
 	/**
 	 * @private
@@ -50,7 +51,7 @@ function Curve ( color, pos, keys ) {
 	 * @return void
 	 * @param { double } distance
 	 */
-	this.move = function ( dist ) {
+	this.move = function ( ) {
 		if ( dirOptions.turnLeft ) {
 			dirOptions.currentDir.turnRadians( -dirOptions.turningRadians );
 		}
@@ -58,10 +59,10 @@ function Curve ( color, pos, keys ) {
 			dirOptions.currentDir.turnRadians( dirOptions.turningRadians );
 		}
 		
-		pos.row -= dirOptions.currentDir.y * dist; // - because canvas upper left corner is (0, 0)
-		pos.col += dirOptions.currentDir.x * dist;
+		this.pos.row -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
+		this.pos.col += dirOptions.currentDir.x;
 		
-		return pos;
+		return this.pos;
 	};
 	
 	init ( );

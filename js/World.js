@@ -40,7 +40,10 @@ function World ( game, canvasDOM ) {
 		context.fillRect( 0, 0, options.height, options.width );
 		
 		window.setInterval( run, 1000 / options.fps );
-		window.setInterval( // TEST DATA-STRUCTURE
+		
+		// TEST DATA-STRUCTURE
+		testDataStructure( options, blockedTiles );
+		window.setInterval(
 			function() {
 				testDataStructure( options, blockedTiles );
 			}
@@ -61,10 +64,12 @@ function World ( game, canvasDOM ) {
 		for ( i in game.curves ) {
 			var curve = game.curves[ i ];
 			
-			var pos = curve.move( options.curveRadius );
+			var lastpos = new Point( curve.pos.row, curve.pos.col );
+			var pos = curve.move( );
+			
 			if ( !isTileBlocked( pos ) ) {
 				blockTile( pos );
-			} else {
+			} else if ( !pos.equals( lastpos, false ) ) {
 				// Draw a rectangle
 				var rectSize = options.curveRadius + 4;
 				
@@ -75,8 +80,7 @@ function World ( game, canvasDOM ) {
 				context.fill( );
 				
 				// Kill
-				curvesToKill.push( curve );
-				
+				curvesToKill.push( i );
 				continue;
 			}
 			
@@ -90,7 +94,7 @@ function World ( game, canvasDOM ) {
 		
 		for (var i = curvesToKill.length - 1; i >= 0; i--) {
 			// Note: Important to decrement i
-			game.killCurve( null, i );
+			game.killCurve( null, curvesToKill[ i ] );
 		}
 	};
 	
@@ -153,7 +157,7 @@ function testDataStructure(options, ds) {
 			if ( ds[ r ] && ds[ r ][ c ] && ds[ r ][ c ] == true ) {
 				context2.beginPath( );
 				context2.fillStyle = "#ffffff";
-				context2.arc( c, r, options.curveRadius, 0, Math.PI * 2, true ); 
+				context2.fillRect( c, r, 1, 1 ); 
 				context2.closePath( );
 				context2.fill( );
 			}
