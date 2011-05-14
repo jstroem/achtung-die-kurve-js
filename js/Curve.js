@@ -11,7 +11,7 @@ function Curve ( color, pos, keys ) {
 			currentDir: new Vector( 0, 1 ),
 			turnLeft: false,
 			turnRight: false,
-			turningRadians: 0.1
+			turningRadians: 0.05
 		};
 	
 	this.color = color,

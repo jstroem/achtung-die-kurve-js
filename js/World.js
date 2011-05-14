@@ -13,7 +13,7 @@ function World ( game, canvasDOM ) {
 		options = {
 			height: 500,
 			width: 500,
-			curveRadius: 1,
+			curveRadius: 4,
 			background: "#000000",
 			fps: 60
 		},
@@ -87,7 +87,13 @@ function World ( game, canvasDOM ) {
 			// Draw a circle
 			context.beginPath( );
 			context.fillStyle = curve.color;
-			context.arc( pos.col, pos.row, options.curveRadius, 0, Math.PI * 2, true ); 
+			context.arc( lastpos.col, lastpos.row, options.curveRadius, 0, Math.PI * 2, true );
+			context.closePath( );
+			context.fill( );
+			
+			context.beginPath( );
+			context.fillStyle = "yellow";
+			context.arc( pos.col, pos.row, options.curveRadius, 0, Math.PI * 2, true );
 			context.closePath( );
 			context.fill( );
 		}
