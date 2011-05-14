@@ -125,7 +125,14 @@ function World ( game, canvasDOM ) {
 	 * @param { Point } pos, the position (row, col) to block
 	 */
 	function blockTile ( pos ) {
-		blockedTiles[ Math.round(pos.row) - 1 ][ Math.round(pos.col) - 1] = true;
+		var i, j;
+		for( i = pos.row - options.curveRadius; i < pos.row + options.curveRadius; i++ ){
+			for ( j =  pos.col - options.curveRadius; j < pos.row + options.curveRadius; j++ ) {
+				if ( Math.pow( ( i - pos.row ), 2 ) + Math.pow( ( j - pos.col ), 2 ) <= Math.pow( options.curveRadius, 2 ) ) {		
+					blockedTiles[ Math.round( pos.row ) - 1 ][ Math.round(pos.col) - 1] = true;					
+				}
+			}
+		}
 	}
 	
 	init( );
