@@ -85,17 +85,8 @@ function World ( game, canvasDOM ) {
 			}
 			
 			// Draw a circle
-			context.beginPath( );
-			context.fillStyle = curve.color;
-			context.arc( lastpos.col, lastpos.row, options.curveRadius, 0, Math.PI * 2, true );
-			context.closePath( );
-			context.fill( );
-			
-			context.beginPath( );
-			context.fillStyle = "yellow";
-			context.arc( pos.col, pos.row, options.curveRadius, 0, Math.PI * 2, true );
-			context.closePath( );
-			context.fill( );
+			drawCircle( lastpos, options.curveRadius, curve.color, context );
+			drawCircle( pos, options.curveRadius, "yellow", context );
 		}
 		
 		for (var i = curvesToKill.length - 1; i >= 0; i--) {
