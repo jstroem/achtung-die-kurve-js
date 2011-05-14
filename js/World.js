@@ -13,7 +13,7 @@ function World ( game, canvasDOM ) {
 		options = {
 			height: 500,
 			width: 500,
-			pxPerTile: 2,
+			curveRadius: 1,
 			background: "#000000",
 			fps: 60
 		},
@@ -40,6 +40,12 @@ function World ( game, canvasDOM ) {
 		context.fillRect( 0, 0, options.height, options.width );
 		
 		window.setInterval( run, 1000 / options.fps );
+		window.setInterval( // TEST DATA-STRUCTURE
+			function() {
+				testDataStructure( options, blockedTiles );
+			}
+			, 2000
+		);
 	};
 	
 	/** 
@@ -49,34 +55,72 @@ function World ( game, canvasDOM ) {
 	 */
 	function run ( ) {
 		
+		var curvesToKill = new Array();
+		
 		// Draw background
 		for ( i in game.curves ) {
-			var curve = game.curves[i];
+			var curve = game.curves[ i ];
 			
-			var pos = curve.move();
-			if (!isTileBlocked(pos)) {
-				blockTile(pos);
+			var pos = curve.move( options.curveRadius );
+			if ( !isTileBlocked( pos ) ) {
+				blockTile( pos );
 			} else {
-				alert("BLOCKED"); // TO DO: Errors with the blocked, because integers are too grain
+				// Draw a rectangle
+				var rectSize = options.curveRadius + 4;
+				
+				context.beginPath( );
+				context.fillStyle = "#ffffff";
+				context.fillRect( pos.col - rectSize / 2, pos.row - rectSize / 2, rectSize, rectSize );  
+				context.closePath( );
+				context.fill( );
+				
+				// Kill
+				curvesToKill.push( curve );
+				
+				continue;
 			}
 			
 			// Draw a circle
-			context.beginPath();
+			context.beginPath( );
 			context.fillStyle = curve.color;
-			context.arc( pos.col, pos.row, 2, 0, Math.PI * 2, true ); 
-			context.closePath();
-			context.fill();
+			context.arc( pos.col, pos.row, options.curveRadius, 0, Math.PI * 2, true ); 
+			context.closePath( );
+			context.fill( );
+		}
+		
+		for (var i = curvesToKill.length - 1; i >= 0; i--) {
+			// Note: Important to decrement i
+			game.killCurve( null, i );
 		}
 	};
 	
 	/**
-	 * @public
+	 * @private
+	 * @method checks whether a given position (row, col) is within the bounds of the game
+	 * @return boolean
+	 * @param { Point } pos, the position (row, col) to check
+	 */
+	function isWithinBounds ( pos ) {
+		return pos.row > 0 && pos.row < options.width && pos.col > 0 && pos.col < options.height;
+	}
+	
+	/**
+	 * @private
 	 * @method isTileBlocked should check if a tile is occupied by another object.
 	 * @return boolean
 	 * @param { Point } pos, the position (row, col) to check
 	 */
 	function isTileBlocked ( pos ) {
-		return blockedTiles[ pos.row - 1 ][ pos.col - 1];
+		if ( isWithinBounds ( pos ) ) {
+			try {
+				return blockedTiles[ Math.round(pos.row) - 1 ][ Math.round(pos.col) - 1];
+			} catch (err) {
+				// blockedTiles not initialized at this place - i.e. the pos is NOT blocked
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 	
 	/**
@@ -86,8 +130,33 @@ function World ( game, canvasDOM ) {
 	 * @param { Point } pos, the position (row, col) to block
 	 */
 	function blockTile ( pos ) {
-		blockedTiles[ pos.row - 1 ][ pos.col - 1] = true;
+		blockedTiles[ Math.round(pos.row) - 1 ][ Math.round(pos.col) - 1] = true;
 	}
 	
 	init( );
 };
+
+function testDataStructure(options, ds) {
+	var canvasDOM2 = document.getElementById( "gameTest" );
+	var context2 = canvasDOM2.getContext( "2d" );
+	
+	// Initialize DOM
+	canvasDOM2.width = options.width;
+	canvasDOM2.height = options.height;
+	
+	// Draw background
+	context2.fillStyle = options.background;
+	context2.fillRect( 0, 0, options.height, options.width );
+	
+	for ( var r = 0; r < options.height; r++ ) {
+		for ( var c = 0; c < options.width; c++ ) {
+			if ( ds[ r ] && ds[ r ][ c ] && ds[ r ][ c ] == true ) {
+				context2.beginPath( );
+				context2.fillStyle = "#ffffff";
+				context2.arc( c, r, options.curveRadius, 0, Math.PI * 2, true ); 
+				context2.closePath( );
+				context2.fill( );
+			}
+		}
+	}
+}

@@ -20,4 +20,23 @@ function Game ( canvasDOM ) {
 	this.addCurve = function ( curve ) {
 		this.curves.push ( curve );
 	};
+	
+	/**
+	 * @method Kills the curve, i.e. stops it
+	 * @param curve, the curve to kill
+	 * @return void
+	 */
+	this.killCurve = function ( curve, i ) {
+		if ( curve != null ) {
+			for ( c in this.curves ) {
+				if ( curve == this.curves[ c ] ) {
+					i = c;
+					break;
+				}
+			}
+		}
+		if ( i != null ) {
+			this.curves.splice( i, 1 );
+		}
+	};
 };

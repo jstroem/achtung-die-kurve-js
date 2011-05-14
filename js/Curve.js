@@ -48,8 +48,9 @@ function Curve ( color, pos, keys ) {
 	 * @public
 	 * @method Is run on every redraw.
 	 * @return void
+	 * @param { double } distance
 	 */
-	this.move = function ( ) {
+	this.move = function ( dist ) {
 		if ( dirOptions.turnLeft ) {
 			dirOptions.currentDir.turnRadians( -dirOptions.turningRadians );
 		}
@@ -57,10 +58,10 @@ function Curve ( color, pos, keys ) {
 			dirOptions.currentDir.turnRadians( dirOptions.turningRadians );
 		}
 		
-		pos.row -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
-		pos.col += dirOptions.currentDir.x;
+		pos.row -= dirOptions.currentDir.y * dist; // - because canvas upper left corner is (0, 0)
+		pos.col += dirOptions.currentDir.x * dist;
 		
-		return new Point ( parseInt( pos.row ), parseInt( pos.col ) );
+		return pos;
 	};
 	
 	init ( );
