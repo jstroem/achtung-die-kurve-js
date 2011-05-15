@@ -26,6 +26,7 @@ function World ( game, canvasDOM ) {
 	 * @param {  HTMLCanvasElement } c 
 	 */
 	function init ( ) {
+		
 		// Initialize data structures
 		for ( var i = 0; i < options.height; i++ ) {
 			blockedTiles.push( new Array( ) ); // for each pixel in height: add array for a row
@@ -38,17 +39,10 @@ function World ( game, canvasDOM ) {
 		// Draw background
 		context.fillStyle = options.background;
 		context.fillRect( 0, 0, options.height, options.width );
-		
+	};
+	
+	this.start = function( ) {
 		window.setInterval( run, 1000 / options.fps );
-		
-		// TEST DATA-STRUCTURE
-		testDataStructure( options, blockedTiles );
-		window.setInterval(
-			function() {
-				testDataStructure( options, blockedTiles );
-			}
-			, 2000
-		);
 	};
 	
 	/** 
@@ -57,30 +51,33 @@ function World ( game, canvasDOM ) {
 	 * @return void
 	 */
 	function run ( ) {
-		
 		var curvesToKill = new Array();
 		
 		// Draw background
 		for ( i in game.curves ) {
 			var curve = game.curves[ i ];
+			curve.move( );
 			
-			var lastpos = new Point( curve.pos.row, curve.pos.col );
-			var pos = curve.move( );
-			
-			if ( !isTileBlocked( pos ) ) {
-				blockTile( pos );
-			} else if ( !pos.equals( lastpos, false ) ) {
+			if ( !isTileBlocked( curve.pos, curve.dir ) ) {
+				blockTile( curve.pos );
+			} else if ( !curve.pos.equals( curve.lastpos, false ) ) {
 				// Draw a rectangle
-				drawRectangle( pos, options.curveRadius + 4, context );
+				drawRectangle( curve.pos, options.curveRadius + 4, "white", context );
 				
 				// Kill
 				curvesToKill.push( i );
-				continue;
 			}
 			
 			// Draw a circle
-			drawCircle( lastpos, options.curveRadius, curve.color, context );
-			drawCircle( pos, options.curveRadius, "yellow", context );
+			if ( !curve.isDead ) {
+				drawCircle( curve.lastpos, options.curveRadius, curve.color, context );
+				drawCircle( curve.pos, options.curveRadius, "yellow", context );
+			}
+			
+			// Propagate updates
+			if ( game.networkHandler ) {
+				game.networkHandler.sendGameUpdate( curve );
+			}
 		}
 		
 		for (var i = curvesToKill.length - 1; i >= 0; i--) {
@@ -104,15 +101,27 @@ function World ( game, canvasDOM ) {
 	 * @method isTileBlocked should check if a tile is occupied by another object.
 	 * @return boolean
 	 * @param { Point } pos, the position (row, col) to check
+	 * @param { Vector } dir, the curve's direction-vector
 	 */
-	function isTileBlocked ( pos ) {
+	function isTileBlocked ( pos, dir ) {
 		if ( isWithinBounds ( pos ) ) {
-			try {
-				return blockedTiles[ Math.round(pos.row) - 1 ][ Math.round(pos.col) - 1];
-			} catch (err) {
-				// blockedTiles not initialized at this place - i.e. the pos is NOT blocked
-				return false;
+			var perimeter = 2 * Math.PI * options.curveRadius,
+				diameter = 2 * options.curveRadius,
+				theta = -Math.PI / 2, 
+				testDir, testPos, i;
+			
+			for ( i = 0; i < perimeter; i++)  {
+				theta += Math.PI / perimeter;
+				testDir = new Vector( dir.x, dir.y ).multiply( diameter ).turnRadians( theta );
+				testPos = new Point( Math.round( pos.row - testDir.y ), Math.round( pos.col + testDir.x ) );
+				try {
+					if (blockedTiles[ testPos.row - 1 ][ testPos.col - 1] == true) {
+						return true;
+					} 
+				} catch (err) {
+				}
 			}
+			return false;
 		} else {
 			return true;
 		}
@@ -124,41 +133,9 @@ function World ( game, canvasDOM ) {
 	 * @return void
 	 * @param { Point } pos, the position (row, col) to block
 	 */
-	function blockTile ( pos ) {
-		var i, j;
-		for( i = pos.row - options.curveRadius; i < pos.row + options.curveRadius; i++ ){
-			for ( j =  pos.col - options.curveRadius; j < pos.row + options.curveRadius; j++ ) {
-				if ( Math.pow( ( i - pos.row ), 2 ) + Math.pow( ( j - pos.col ), 2 ) <= Math.pow( options.curveRadius, 2 ) ) {		
-					blockedTiles[ Math.round( pos.row ) - 1 ][ Math.round(pos.col) - 1] = true;					
-				}
-			}
-		}
+	function blockTile( pos ) {
+		blockedTiles[ Math.round( pos.row ) - 1 ][ Math.round( pos.col ) - 1] = true;
 	}
 	
 	init( );
 };
-
-function testDataStructure(options, ds) {
-	var canvasDOM2 = document.getElementById( "gameTest" );
-	var context2 = canvasDOM2.getContext( "2d" );
-	
-	// Initialize DOM
-	canvasDOM2.width = options.width;
-	canvasDOM2.height = options.height;
-	
-	// Draw background
-	context2.fillStyle = options.background;
-	context2.fillRect( 0, 0, options.height, options.width );
-	
-	for ( var r = 0; r < options.height; r++ ) {
-		for ( var c = 0; c < options.width; c++ ) {
-			if ( ds[ r ] && ds[ r ][ c ] && ds[ r ][ c ] == true ) {
-				context2.beginPath( );
-				context2.fillStyle = "#ffffff";
-				context2.fillRect( c, r, 1, 1 );  
-				context2.closePath( );
-				context2.fill( );
-			}
-		}
-	}
-}

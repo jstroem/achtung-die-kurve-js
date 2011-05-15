@@ -6,6 +6,8 @@
 		
 		<link rel="stylesheet" type="text/css" media="screen" href="css/styles.css"/>
 		
+ 		<script src="http://jstroem.com:8998/socket.io/socket.io.js"></script>
+ 		
 		<script src="js/common.js" type="text/javascript"></script>
 		
 		<script src="js/Vector.js" type="text/javascript"></script>
@@ -14,14 +16,16 @@
 		<script src="js/Game.js" type="text/javascript"></script>
 		<script src="js/World.js" type="text/javascript"></script>
 		<script src="js/Curve.js" type="text/javascript"></script>
+		<script src="js/NetworkHandler.js" type="text/javascript"></script>
 		
 		<script type="text/javascript">
 			addEvent( window, 'load', function() {
-				var g = new Game( document.getElementById( "game" ) );
+				var g = new Game( document.getElementById( "game" ), 8998 );
 				g.addCurve(
 					new Curve(
 						"#00FF00",
-						new Point( 375, 125 ),
+						new Point( 250, 125 ),
+						new Vector( 1, 0 ),
 						{
 							left: 37, // left-arrow
 							right: 39 // right-arrow
@@ -31,7 +35,8 @@
 				g.addCurve(
 					new Curve(
 						"#FF0000",
-						new Point( 375, 375 ),
+						new Point( 250, 375 ),
+						new Vector( -1, 0 ),
 						{
 							left: 65, // A
 							right: 68 // D
@@ -44,6 +49,5 @@
 	</head>
 	<body>
 		<canvas id="game"></canvas>
-		<canvas id="gameTest"></canvas>
 	</body>
 </html>

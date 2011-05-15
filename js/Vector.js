@@ -14,12 +14,25 @@ function Vector ( x, y ) {
 	/**
 	 * @public
 	 * @method Turns the curve theta radians using the rotation matrix of R2.
-	 * @return void
+	 * @return { Vector } this
+	 * @param { int } theta
+	 */
+	this.multiply = function ( c ) {
+		this.x *= c;
+		this.y *= c;
+		return this;
+	};
+	
+	/**
+	 * @public
+	 * @method Turns the curve theta radians using the rotation matrix of R2.
+	 * @return { Vector } this
 	 * @param { int } theta
 	 */
 	this.turnRadians = function ( theta ) {
 		var newX = this.x * Math.cos( theta ) + this.y * Math.sin ( theta );
 		this.y = this.y * Math.cos( theta ) - this.x * Math.sin ( theta );
 		this.x = newX;
+		return this;
 	};
 }

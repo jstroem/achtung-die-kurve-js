@@ -5,17 +5,19 @@
  * @methods
  * 		-
  */
-function Curve ( color, pos, keys ) {
+function Curve ( color, pos, dir, keys ) {
 	var self = this, // To be used in private-methods.
 		dirOptions = {
-			currentDir: new Vector( 0, 1 ),
 			turnLeft: false,
 			turnRight: false,
 			turningRadians: 0.05
 		};
 	
 	this.color = color,
-	this.pos   = pos;
+	this.pos = pos,
+	this.lastpos = new Point( -1, -1 ),
+	this.dir = dir,
+	this.isDead = false;
 	
 	/**
 	 * @private
@@ -52,17 +54,18 @@ function Curve ( color, pos, keys ) {
 	 * @param { double } distance
 	 */
 	this.move = function ( ) {
+		this.lastpos.row = this.pos.row;
+		this.lastpow.col = this.pos.col;
+		
 		if ( dirOptions.turnLeft ) {
-			dirOptions.currentDir.turnRadians( -dirOptions.turningRadians );
+			this.dir.turnRadians( -dirOptions.turningRadians );
 		}
 		if ( dirOptions.turnRight ) {
-			dirOptions.currentDir.turnRadians( dirOptions.turningRadians );
+			this.dir.turnRadians( dirOptions.turningRadians );
 		}
 		
-		this.pos.row -= dirOptions.currentDir.y; // - because canvas upper left corner is (0, 0)
-		this.pos.col += dirOptions.currentDir.x;
-		
-		return this.pos;
+		this.pos.row -= this.dir.y; // - because canvas upper left corner is (0, 0)
+		this.pos.col += this.dir.x;
 	};
 	
 	init ( );

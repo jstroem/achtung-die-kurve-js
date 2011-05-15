@@ -5,11 +5,25 @@
  * @methods
  * 		void addCurve ( Curve curve )
  */
-function Game ( canvasDOM ) {
-	var self   = this, // To be used in private-methods.
-		world  = new World ( this, canvasDOM );
+function Game ( canvasDOM, port ) {
+	var self = this; // To be used in private-methods.;
 	
-	this.curves = new Array ( ); // No need for a specific data-structure so far.
+	this.world = new World ( this, canvasDOM ),
+	this.curves = [], // No need for a specific data-structure so far.
+	this.networkHandler;
+	
+	/**
+	 * @private
+	 * @method Initializes the Game.
+	 * @return void
+	 */
+	function init( ) {
+		if (port) {
+			self.networkHandler = new NetworkHandler( self, port );
+		} else {
+			self.world.start( );
+		}
+	}
 	
 	/**
 	 * @public
@@ -36,7 +50,10 @@ function Game ( canvasDOM ) {
 			}
 		}
 		if ( i != null ) {
+			this.curves[ i ].isKilled = true;
 			this.curves.splice( i, 1 );
 		}
 	};
+	
+	init( );
 };
