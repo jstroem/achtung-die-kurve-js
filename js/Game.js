@@ -6,10 +6,11 @@
  * 		void addCurve ( Curve curve )
  */
 function Game ( canvasDOM, port ) {
-	var self = this; // To be used in private-methods.;
+	var self = this;
 	
-	this.world = new World ( this, canvasDOM ),
-	this.curves = [], // No need for a specific data-structure so far.
+	this.drawer = new Drawer( canvasDOM );
+	this.world = new World ( this ),
+	this.curves = [],
 	this.networkHandler;
 	
 	/**

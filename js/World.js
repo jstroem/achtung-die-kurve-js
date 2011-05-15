@@ -7,9 +7,8 @@
  * 		void blockTile ( int row, int col, Curve curve )	
  */
 
-function World ( game, canvasDOM ) {
-	var self    = this, // To be used in private-methods.
-		context = canvasDOM.getContext( "2d" ),
+function World ( game ) {
+	var self = this, // To be used in private-methods.
 		options = {
 			height: 500,
 			width: 500,
@@ -37,8 +36,7 @@ function World ( game, canvasDOM ) {
 		canvasDOM.width = options.width;
 		
 		// Draw background
-		context.fillStyle = options.background;
-		context.fillRect( 0, 0, options.height, options.width );
+		game.drawer.drawRectangle( new Point( options.height / 2, options.width / 2 ), options.width, options.height, options.background );
 	};
 	
 	this.start = function( ) {
@@ -62,7 +60,7 @@ function World ( game, canvasDOM ) {
 				blockTile( curve.pos );
 			} else if ( !curve.pos.equals( curve.lastpos, false ) ) {
 				// Draw a rectangle
-				drawRectangle( curve.pos, options.curveRadius + 4, "white", context );
+				game.drawer.drawRectangle( curve.pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
 				
 				// Kill
 				curvesToKill.push( i );
@@ -70,8 +68,8 @@ function World ( game, canvasDOM ) {
 			
 			// Draw a circle
 			if ( !curve.isDead ) {
-				drawCircle( curve.lastpos, options.curveRadius, curve.color, context );
-				drawCircle( curve.pos, options.curveRadius, "yellow", context );
+				game.drawer.drawCircle( curve.lastpos, options.curveRadius, curve.color );
+				game.drawer.drawCircle( curve.pos, options.curveRadius, "yellow" );
 			}
 			
 			// Propagate updates
