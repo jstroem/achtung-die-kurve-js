@@ -1,4 +1,4 @@
 <?php
-echo exec("ls");
+echo exec("ls -a");
 echo exec("git pull");
 ?>
