@@ -35,4 +35,15 @@ function Vector ( x, y ) {
 		this.x = newX;
 		return this;
 	};
+	
+	this.getLength = function( ) {
+		return Math.sqrt( Math.pow( this.x, 2 ) + Math.pow( this.y, 2 ) );
+	};
+	
+	this.normalize = function( ) {
+		var length = this.getLength( );
+		this.x = this.x / length;
+		this.y = this.y / length;
+		return this;
+	};
 }

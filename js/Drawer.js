@@ -1,6 +1,11 @@
 function Drawer( canvasDOM ) {
 	var context = canvasDOM.getContext( "2d" );
 	
+	this.setCanvasSize = function ( width, height ) {
+		canvasDOM.width = width;
+		canvasDOM.height = height;
+	};
+	
 	this.drawCircle = function( pos, radius, color ) {
 		context.beginPath( );
 		context.fillStyle = color;

@@ -5,7 +5,7 @@
  * @methods
  * 		-
  */
-function Curve ( color, pos, dir, keys ) {
+function Curve( color, pos, dir, keys ) {
 	var self = this, // To be used in private-methods.
 		dirOptions = {
 			turnLeft: false,
@@ -24,7 +24,7 @@ function Curve ( color, pos, dir, keys ) {
 	 * @method Initializes the curve, including event handlers. Called on construction.
 	 * @return void
 	 */
-	function init ( ) {
+	function init( ) {
 		addEvent( document, 'keydown', function( e ) {
 			keyPressHandler( true, getKeyCode( e ) );
 		}, false );
@@ -39,7 +39,7 @@ function Curve ( color, pos, dir, keys ) {
 	 * @param { boolean } down, { int } keyCode
 	 * @return void
 	 */
-	function keyPressHandler ( down, keyCode ) {
+	function keyPressHandler( down, keyCode ) {
 		if ( keyCode == keys.left ) {
 			dirOptions.turnLeft = down;
 		} else if ( keyCode == keys.right ) {
@@ -53,9 +53,9 @@ function Curve ( color, pos, dir, keys ) {
 	 * @return void
 	 * @param { double } distance
 	 */
-	this.move = function ( ) {
+	this.move = function( ) {
 		this.lastpos.row = this.pos.row;
-		this.lastpow.col = this.pos.col;
+		this.lastpos.col = this.pos.col;
 		
 		if ( dirOptions.turnLeft ) {
 			this.dir.turnRadians( -dirOptions.turningRadians );
@@ -70,12 +70,3 @@ function Curve ( color, pos, dir, keys ) {
 	
 	init ( );
 };
-
-function getKeyCode ( e ) {
-	if ( window.event ) {
-		return window.event.keyCode;
-	} else if ( e ) {
-		return e.which;
-	}
-	return null;
-}

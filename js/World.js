@@ -12,7 +12,7 @@ function World ( game ) {
 		options = {
 			height: 500,
 			width: 500,
-			curveRadius: 4,
+			curveRadius: 2,
 			background: "#000000",
 			fps: 60
 		},
@@ -31,11 +31,8 @@ function World ( game ) {
 			blockedTiles.push( new Array( ) ); // for each pixel in height: add array for a row
 		}
 		
-		// Initialize DOM
-		canvasDOM.height = options.height;
-		canvasDOM.width = options.width;
-		
-		// Draw background
+		// Initialize Canvas DOM
+		game.drawer.setCanvasSize( options.width, options.height );
 		game.drawer.drawRectangle( new Point( options.height / 2, options.width / 2 ), options.width, options.height, options.background );
 	};
 	
@@ -49,10 +46,8 @@ function World ( game ) {
 	 * @return void
 	 */
 	function run ( ) {
-		var curvesToKill = new Array();
-		
 		// Draw background
-		for ( i in game.curves ) {
+		for ( var i = 0; i < game.curves.length; i++ ) {
 			var curve = game.curves[ i ];
 			curve.move( );
 			
@@ -63,7 +58,8 @@ function World ( game ) {
 				game.drawer.drawRectangle( curve.pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
 				
 				// Kill
-				curvesToKill.push( i );
+				game.killCurve( null, i );
+				i--;
 			}
 			
 			// Draw a circle
@@ -76,11 +72,6 @@ function World ( game ) {
 			if ( game.networkHandler ) {
 				game.networkHandler.sendGameUpdate( curve );
 			}
-		}
-		
-		for (var i = curvesToKill.length - 1; i >= 0; i--) {
-			// Note: Important to decrement i
-			game.killCurve( null, curvesToKill[ i ] );
 		}
 	};
 	

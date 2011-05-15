@@ -3,7 +3,7 @@
  * @classDescription Handles network trafic.
  * @constructor networkOptions
  */
-function NetworkHandler( game, port ) {
+function NetworkHandler( game ) {
 	var self = this, // To be used in private-methods.
 		socket;
 	

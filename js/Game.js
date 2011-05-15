@@ -1,3 +1,5 @@
+var port = 8998;
+
 /**
  * @author Jesper & Christoffer
  * @classDescription Represents a Curve-game.
@@ -5,7 +7,7 @@
  * @methods
  * 		void addCurve ( Curve curve )
  */
-function Game ( canvasDOM, port ) {
+function Game ( canvasDOM, singleplayer ) {
 	var self = this;
 	
 	this.drawer = new Drawer( canvasDOM );
@@ -19,10 +21,8 @@ function Game ( canvasDOM, port ) {
 	 * @return void
 	 */
 	function init( ) {
-		if (port) {
-			self.networkHandler = new NetworkHandler( self, port );
-		} else {
-			self.world.start( );
+		if ( !singleplayer ) {
+			self.networkHandler = new NetworkHandler( self );
 		}
 	}
 	
@@ -51,7 +51,7 @@ function Game ( canvasDOM, port ) {
 			}
 		}
 		if ( i != null ) {
-			this.curves[ i ].isKilled = true;
+			this.curves[ i ].isDead = true;
 			this.curves.splice( i, 1 );
 		}
 	};
