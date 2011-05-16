@@ -33,7 +33,7 @@ function World ( game ) {
 		
 		// Initialize Canvas DOM
 		game.drawer.setCanvasSize( options.width, options.height );
-		game.drawer.drawRectangle( new Point( options.height / 2, options.width / 2 ), options.width, options.height, options.background );
+		game.drawer.setBackground( options.background );
 	};
 	
 	this.start = function( ) {
@@ -46,7 +46,6 @@ function World ( game ) {
 	 * @return void
 	 */
 	function run ( ) {
-		// Draw background
 		for ( var i = 0; i < game.curves.length; i++ ) {
 			var curve = game.curves[ i ];
 			curve.move( );
@@ -54,7 +53,7 @@ function World ( game ) {
 			if ( !isTileBlocked( curve.pos, curve.dir ) ) {
 				blockTile( curve.pos );
 			} else if ( !curve.pos.equals( curve.lastpos, false ) ) {
-				// Draw a rectangle
+				// Draw a rectangle to indicate dead
 				game.drawer.drawRectangle( curve.pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
 				
 				// Kill
@@ -104,7 +103,7 @@ function World ( game ) {
 				testDir = new Vector( dir.x, dir.y ).multiply( diameter ).turnRadians( theta );
 				testPos = new Point( Math.round( pos.row - testDir.y ), Math.round( pos.col + testDir.x ) );
 				try {
-					if (blockedTiles[ testPos.row - 1 ][ testPos.col - 1] == true) {
+					if ( blockedTiles[ testPos.row - 1 ][ testPos.col - 1 ] == true ) {
 						return true;
 					} 
 				} catch (err) {
@@ -123,7 +122,7 @@ function World ( game ) {
 	 * @param { Point } pos, the position (row, col) to block
 	 */
 	function blockTile( pos ) {
-		blockedTiles[ Math.round( pos.row ) - 1 ][ Math.round( pos.col ) - 1] = true;
+		blockedTiles[ Math.round( pos.row ) - 1 ][ Math.round( pos.col ) - 1 ] = true;
 	}
 	
 	init( );

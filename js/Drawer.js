@@ -10,15 +10,21 @@ function Drawer( canvasDOM ) {
 		context.beginPath( );
 		context.fillStyle = color;
 		context.arc( pos.col, pos.row, radius, 0, Math.PI * 2, true );
-		context.closePath( );
 		context.fill( );
+		context.closePath( );
 	};
 
 	this.drawRectangle = function( pos, width, height, color ) {
-		context.beginPath( );
 		context.fillStyle = color;
-		context.fillRect( pos.col - width / 2, pos.row - height / 2, width, height );  
-		context.closePath( );
-		context.fill( );
+		context.fillRect( pos.col - width / 2, pos.row - height / 2, width, height );
 	};
+	
+	this.setBackground = function ( background ) {
+		context.fillStyle = background;
+		context.fillRect( 0, 0, canvasDOM.width, canvasDOM.height );
+	}
+	
+	this.clearCanvas = function ( ) {
+		context.clearRect( 0, 0, canvasDOM.width, canvasDOM.height );
+	}
 }
