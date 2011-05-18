@@ -33,11 +33,14 @@ function Lobby( domElements ) {
 		
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
+			domElements.gamelist.innerHTML = "";
+			
 			var game = games[ i ];
 			if ( game.name && game.id ) {
 				var liItem = document.createElement( "li" );
 				liItem.innerHTML = game.name;
 				liItem.value = game.id;
+				liItem.className = (i % 2 == 0) ? "even" : "odd";
 				
 				domElements.gamelist.appendChild( liItem );
 			}
