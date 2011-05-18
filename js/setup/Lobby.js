@@ -91,6 +91,7 @@ function Lobby( domElements ) {
 				}
 			);
 		} else {
+			console.log( update );
 			$.cookie( "game", JSON.stringify( update ) );
 			document.location = "game-multiplayer.html";
 		}
