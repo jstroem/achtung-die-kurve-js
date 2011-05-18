@@ -28,19 +28,18 @@ function Lobby( domElements ) {
 		this.refresh( );
 	}
 	
-	function updateGames( games ) {
-		var i = 0;
-		var game = games[ i ];
-		while ( game ) {
+	function updateGames( update ) {
+		console.log( update );
+		
+		var games = update.games;
+		for ( var i = 0; i < games.length; i++ ) {
 			if ( game.name && game.id ) {
 				var liItem = document.createElement( "li" );
 				liItem.innerHTML = game.name;
 				liItem.value = game.id;
 				
-				gamelist.appendChild( liItem );
+				domElements.gamelist.appendChild( liItem );
 			}
-			
-			game = games [ ++i ];
 		}
 	}
 	

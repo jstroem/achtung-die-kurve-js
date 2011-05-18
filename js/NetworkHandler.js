@@ -65,11 +65,11 @@ function NetworkHandler( ) {
 		}
 	};
 	
-	function notifyObservers( type ) {
-		var list = observers[ type ];
+	function notifyObservers( update ) {
+		var list = observers[ update.type ];
 		if ( list ) {
 			for ( var i = 0; i < list.length; i++ ) {
-				list[ i ]();
+				list[ i ]( update );
 			}
 		}
 	};
@@ -99,7 +99,7 @@ function NetworkHandler( ) {
 			return;
 		}
 		
-		notifyObservers( update.type );
+		notifyObservers( update );
 	};
 	
 	init( );
