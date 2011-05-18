@@ -28,6 +28,10 @@ function Lobby( domElements ) {
 		self.refresh( );
 	}
 	
+	this.refresh = function( ) {
+		networkHandler.send( { type: "CURRENT GAMES" } );
+	};
+	
 	function updateGames( update ) {
 		domElements.gamelist.innerHTML = "";
 		
@@ -49,8 +53,22 @@ function Lobby( domElements ) {
 		}
 	}
 	
-	this.refresh = function( ) {
-		networkHandler.send( { type: "CURRENT GAMES" } );
+	this.host = function( ) {
+		networkHandler.send(
+			{
+				type: "HOST",
+				game:
+					{
+						name: domElements.multiplayerOptions.gameName.value,
+						id: Date.getMilliseconds(),
+						options:
+							{
+								wallsOn: domElements.options.wallsOn.checked,
+								maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
+							}
+					}
+			}
+		);
 	};
 	
 	init ( );
