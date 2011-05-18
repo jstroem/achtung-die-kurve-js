@@ -65,36 +65,39 @@ function Lobby( domElements ) {
 					}
 			};
 		
-		networkHandler.send( player );
+		if ( !domElements.singleplayer.checked ) {
+			networkHandler.send( player );
+		}
 		
-		$.cookie( "game", JSON.stringify( player ) );
+		$.cookie( "player", JSON.stringify( player ) );
 	}
 	
 	this.host = function( update ) {
-		if ( domElements.singleplayer.checked ) {
-			document.location = "game-singleplayer.html";
-		}
-		
 		if ( !update ) {
 			registerPlayer( );
 			
-			var game =
-				{
-					type: "HOST",
-					game:
-						{
-							name: domElements.multiplayerOptions.gameName.value,
-							id: "G" + (new Date).getMilliseconds(),
-							options:
-								{
-									wallsOn: domElements.options.wallsOn.checked,
-									maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
-								}
-						}
-				};
+			if ( domElements.singleplayer.checked ) {
+				document.location = "game-singleplayer.html";
+			} else {
+				var game =
+					{
+						type: "HOST",
+						game:
+							{
+								name: domElements.multiplayerOptions.gameName.value,
+								id: "G" + (new Date).getMilliseconds(),
+								options:
+									{
+										wallsOn: domElements.options.wallsOn.checked,
+										maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
+									}
+							}
+					};
 			
-			networkHandler.send( game );
-			$.cookie( "game", JSON.stringify( game ) );
+				networkHandler.send( game );
+				
+				$.cookie( "game", JSON.stringify( game ) );
+			}
 		} else {
 			document.location = "game-multiplayer.html";
 		}
