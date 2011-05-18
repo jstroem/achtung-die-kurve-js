@@ -87,11 +87,11 @@ function Lobby( domElements ) {
 						{
 							name: domElements.multiplayerOptions.gameName.value,
 							id: "G" + (new Date).getTime( ),
-							options:
-								{
-									wallsOn: domElements.options.wallsOn.checked,
-									maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
-								}
+							
+							// Options:
+							public: 1,
+							wallsOn: domElements.options.wallsOn.checked,
+							maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
 						}
 				};
 			
