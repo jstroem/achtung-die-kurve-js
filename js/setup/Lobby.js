@@ -49,10 +49,17 @@ function Lobby( domElements ) {
 				liItem.value = game.id;
 				liItem.className = (i % 2 == 0) ? "even" : "odd";
 				
-				var a = document.createElement( "a" );
-				a.innerHTML = game.name;
+				var aLeft = document.createElement( "a" );
+				aLeft.innerHTML = game.name;
+				aLeft.className = "left";
 				
-				liItem.appendChild( a );
+				var aRight = document.createElement( "a" );
+				aRight.innerHTML = game.noOfPlayers + " / " + game.maxNoOfPlayers;
+				aRight.className = "right";
+				aRight.style.color = (game.noOfPlayers == game.maxNoOfPlayers) ? "red" : "green" ;
+				
+				liItem.appendChild( aLeft );
+				liItem.appendChild( aRight );
 				
 				domElements.gamelist.appendChild( liItem );
 			}
