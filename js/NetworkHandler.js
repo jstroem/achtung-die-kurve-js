@@ -16,9 +16,6 @@ function NetworkHandler( ) {
 	 * @return void
 	 */
 	function init( ) {
-		// Initialize observers
-		observers["CURRENT GAMES"] = [];
-		
 		// Initialize socket
 		socket = new io.Socket( null,
 			{
@@ -39,28 +36,14 @@ function NetworkHandler( ) {
 				}
 			}
 		);
-		
-//		socket.on( 'connect', function( ) {
-//			self.send( { groupid: 'mygroup' } );
-//			game.world.start( );
-//		} );
-//		
-//		socket.on( 'disconnect', function( ) {
-//		} );
-//		
-//		socket.on( 'reconnect', function ( ) {
-//		} );
-//		
-//		socket.on( 'reconnecting', function ( nextRetry ) {
-//		} );
-//		
-//		socket.on( 'reconnect_failed', function ( ) {
-//		} );
 	}
 	
 	this.addObserver = function ( type, func ) {
 		var list = observers[ type ];
-		if ( list ) {
+		if ( !list ) {
+			list = [ func ];
+			observers[ type ] = list;
+		} else {
 			list.push( func );
 		}
 	};
@@ -92,6 +75,7 @@ function NetworkHandler( ) {
 	this.send = function( msg ) {
 		console.log( "SEND:" );
 		console.log( msg );
+		
 		socket.send( msg );
 	};
 	
