@@ -65,11 +65,11 @@ function Lobby( domElements ) {
 					}
 			};
 		
+		$.cookie( "player", JSON.stringify( player ) );
+		
 		if ( !domElements.singleplayer.checked ) {
 			networkHandler.send( player );
 		}
-		
-		$.cookie( "player", JSON.stringify( player ) );
 	}
 	
 	this.host = function( update ) {
@@ -93,10 +93,10 @@ function Lobby( domElements ) {
 									}
 							}
 					};
-			
-				networkHandler.send( game );
 				
 				$.cookie( "game", JSON.stringify( game ) );
+				console.log(game);
+				networkHandler.send( game );
 			}
 		} else {
 			document.location = "game-multiplayer.html";
