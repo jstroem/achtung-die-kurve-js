@@ -25,7 +25,7 @@ function Lobby( domElements ) {
 		networkHandler = new NetworkHandler( );
 		networkHandler.addObserver( "CURRENT GAMES", updateGames );
 		
-		this.refresh( );
+		self.refresh( );
 	}
 	
 	function updateGames( update ) {
