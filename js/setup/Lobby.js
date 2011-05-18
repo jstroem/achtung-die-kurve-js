@@ -29,18 +29,20 @@ function Lobby( domElements ) {
 	}
 	
 	function updateGames( update ) {
-		console.log( update );
+		domElements.gamelist.innerHTML = "";
 		
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
-			domElements.gamelist.innerHTML = "";
-			
 			var game = games[ i ];
 			if ( game.name && game.id ) {
 				var liItem = document.createElement( "li" );
-				liItem.innerHTML = game.name;
 				liItem.value = game.id;
 				liItem.className = (i % 2 == 0) ? "even" : "odd";
+				
+				var a = document.createElement( "a" );
+				a.innerHTML = game.name;
+				
+				liItem.appendChild( a );
 				
 				domElements.gamelist.appendChild( liItem );
 			}
