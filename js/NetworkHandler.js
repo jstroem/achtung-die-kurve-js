@@ -91,7 +91,6 @@ function NetworkHandler( ) {
 	
 	this.send = function( msg ) {
 		socket.send( msg );
-		i++;
 	};
 	
 	function receive( update ) {
