@@ -53,14 +53,29 @@ function Lobby( domElements ) {
 		}
 	}
 	
+	function registerPlayer( ) {
+		networkHandler.send(
+			{
+				type: "NEW PLAYER",
+				player:
+					{
+						name: domElements.nickname,
+						id: "P" + Date.getMilliseconds()
+					}
+			}
+		);
+	}
+	
 	this.host = function( ) {
+		registerPlayer( );
+		
 		networkHandler.send(
 			{
 				type: "HOST",
 				game:
 					{
 						name: domElements.multiplayerOptions.gameName.value,
-						id: Date.getMilliseconds(),
+						id: "G" + Date.getMilliseconds(),
 						options:
 							{
 								wallsOn: domElements.options.wallsOn.checked,
@@ -69,6 +84,9 @@ function Lobby( domElements ) {
 					}
 			}
 		);
+	};
+	
+	this.join = function( ) {
 	};
 	
 	init ( );
