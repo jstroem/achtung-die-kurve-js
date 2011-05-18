@@ -41,6 +41,9 @@ function Lobby( domElements ) {
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
 			var game = games[ i ];
+			
+			console.log( game );
+			
 			if ( game.name && game.id ) {
 				var liItem = document.createElement( "li" );
 				liItem.value = game.id;
