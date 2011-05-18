@@ -61,7 +61,7 @@ function Lobby( domElements ) {
 				player:
 					{
 						name: domElements.nickname,
-						id: "P" + Date.getMilliseconds()
+						id: "P" + (new Date).getMilliseconds()
 					}
 			}
 		);
@@ -81,7 +81,7 @@ function Lobby( domElements ) {
 					game:
 						{
 							name: domElements.multiplayerOptions.gameName.value,
-							id: "G" + Date.getMilliseconds(),
+							id: "G" + (new Date).getMilliseconds(),
 							options:
 								{
 									wallsOn: domElements.options.wallsOn.checked,

@@ -8,7 +8,7 @@
 		
 		<script src="https://www.google.com/jsapi" type="text/javascript"></script>
 		<script type="text/javascript">
-			google.load( "jquery", "1.6.0" );	
+			google.load( "jquery", "1.6.0" );
 		</script>
 		
  		<script src="http://jstroem.com:8998/socket.io/socket.io.js" type="text/javascript"></script>
@@ -36,15 +36,12 @@
 					<h2>Open games</h2>
 					<div class="col">
 						<div class="games darkbox">
-							<ul id="gamelist">
-								<li class="odd"><a href="#">Christoffer's game</a></li>
-								<li class="even"><a href="#">Jesper's game</a></li>
-							</ul>
+							<ul id="gamelist"></ul>
 						</div>
 					</div>
 					<div class="separator">&nbsp;</div>
 					<div class="col">
-						<a class="join button box" href="JavaScript: JoinGame( );">Join Game</a>
+						<a class="join button box" href="JavaScript: lobby.join( );">Join Game</a>
 					</div>
 					<div class="floatbreaker"></div>
 				</div>
@@ -53,7 +50,7 @@
 					<h2>Host game</h2>
 					<div class="host box">
 						<div>
-							<input id="field_options_singleplayer" name="options_singleplayer" type="checkbox" checked="checked" onclick="ToggleSingleplayer( this.checked );" />
+							<input id="field_options_singleplayer" name="options_singleplayer" type="checkbox" checked="checked" />
 							<label for="field_options_singleplayer">Singleplayer</label>
 						</div>
 						<div>
