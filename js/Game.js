@@ -1,5 +1,3 @@
-var port = 8998;
-
 /**
  * @author Jesper & Christoffer
  * @classDescription Represents a Curve-game.

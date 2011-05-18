@@ -38,21 +38,9 @@ function HostGame( ) {
 	pg = new PreGame( singleplayer );
 	
 	var nickname = document.getElementById( "field_name_nick" ).value;
-	pg.addLocalPlayer( new Player( nickname ), ShowGame );
+	pg.addLocalPlayer( new Player( nickname ) );
 	
 	pg.addObserver( "NEW_LOCAL_PLAYER", NewPlayer );
-}
-
-function ShowGame( ) {
-	var lobby = document.getElementById( "lobby" );
-	var gamecontainer = document.getElementById( "gamecontainer" );
-	
-	$( lobby ).animate( { opacity: 0 }, 500 );
-	window.setTimeout( function( ) {
-		lobby.style.display = "none";
-		gamecontainer.style.display = "block";
-		$( gamecontainer ).animate( { opacity: 100 }, 500 );
-	}, 500);
 }
 
 function NewPlayer( player ) {

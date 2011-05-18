@@ -1,6 +1,24 @@
-function PreGame( singleplayer ) {
+/**
+ * @classDescription Lobby
+ * @param
+ * 		{
+ * 			gamelist: <ul>,
+ * 			nickname: <input type="text">,
+ * 			singleplayer: <input type="checkbox">,
+ * 			options:
+ * 				{
+ * 					wallsOn: <input type="checkbox">
+ * 				}
+ * 			multiplayer:
+ * 				{
+ * 					gameName: <input type="text">,
+ * 					maxNoOfPlayers: <input type="text">
+ * 				}
+ * 		} domElements
+ * @return
+ */
+function Lobby( domElements ) {
 	var self = this,
-		game = new Game( document.getElementById( "game" ), singleplayer ),
 		locals = [],
 		externals = [],
 		localStart = false,

@@ -21,7 +21,6 @@ a.host { height: 65px; padding-top: 35px; margin-top: 10px; }
 
 /* Game */
 
-div#gamecontainer { display: none; opacity: 0; }
 div.game { height: 500px; text-align: center; width: 500px; }
 div.game canvas#game { border: 1px solid white; }
 
