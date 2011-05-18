@@ -2,7 +2,6 @@ var achtungSocket = {
     clients: {},
     games: {},
     
-    
     onMessage: function ( msg ) {
         var client = this;
         
