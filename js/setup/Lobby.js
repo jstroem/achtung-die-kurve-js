@@ -24,6 +24,7 @@ function Lobby( domElements ) {
 	function init( ) {
 		networkHandler = new NetworkHandler( );
 		networkHandler.addObserver( "CURRENT GAMES", updateGames );
+		networkHandler.addObserver( "HOST", self.host );
 		
 		self.refresh( );
 	}
@@ -66,24 +67,33 @@ function Lobby( domElements ) {
 		);
 	}
 	
-	this.host = function( ) {
-		registerPlayer( );
+	this.host = function( update ) {
+		if ( domElements.singleplayer.checked ) {
+			document.location = "game-singleplayer.html";
+		}
 		
-		networkHandler.send(
-			{
-				type: "HOST",
-				game:
-					{
-						name: domElements.multiplayerOptions.gameName.value,
-						id: "G" + Date.getMilliseconds(),
-						options:
-							{
-								wallsOn: domElements.options.wallsOn.checked,
-								maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
-							}
-					}
-			}
-		);
+		if ( !update ) {
+			registerPlayer( );
+			
+			networkHandler.send(
+				{
+					type: "HOST",
+					game:
+						{
+							name: domElements.multiplayerOptions.gameName.value,
+							id: "G" + Date.getMilliseconds(),
+							options:
+								{
+									wallsOn: domElements.options.wallsOn.checked,
+									maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
+								}
+						}
+				}
+			);
+		} else {
+			$.cookie( "game", JSON.stringify( update ) );
+			document.location = "game-multiplayer.html";
+		}
 	};
 	
 	this.join = function( ) {
