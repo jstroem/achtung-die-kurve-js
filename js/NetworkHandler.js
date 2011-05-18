@@ -90,10 +90,15 @@ function NetworkHandler( ) {
 //	};
 	
 	this.send = function( msg ) {
+		console.log( "SEND:" );
+		console.log( msg );
 		socket.send( msg );
 	};
 	
 	function receive( update ) {
+		console.log( "RECEIVE:" );
+		console.log( update );
+		
 		if ( !update.type ) {
 			return;
 		}

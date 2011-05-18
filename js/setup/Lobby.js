@@ -73,7 +73,6 @@ function Lobby( domElements ) {
 	}
 	
 	this.host = function( update ) {
-		console.log( update );
 		if ( !update ) {
 			registerPlayer( );
 			
@@ -97,7 +96,6 @@ function Lobby( domElements ) {
 				
 				$.cookie( "game", JSON.stringify( game ) );
 				
-				console.log( game );
 				networkHandler.send( game );
 			}
 		} else {
