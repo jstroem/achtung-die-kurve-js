@@ -73,6 +73,7 @@ function Lobby( domElements ) {
 	}
 	
 	this.host = function( update ) {
+		alert("HOST: " + update)
 		if ( !update ) {
 			registerPlayer( );
 			
