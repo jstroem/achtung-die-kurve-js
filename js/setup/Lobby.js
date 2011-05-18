@@ -55,16 +55,19 @@ function Lobby( domElements ) {
 	}
 	
 	function registerPlayer( ) {
-		networkHandler.send(
+		var player =
 			{
 				type: "NEW PLAYER",
 				player:
 					{
-						name: domElements.nickname,
+						name: domElements.nickname.value,
 						id: "P" + (new Date).getMilliseconds()
 					}
-			}
-		);
+			};
+		
+		networkHandler.send( player );
+		
+		$.cookie( "game", JSON.stringify( player ) );
 	}
 	
 	this.host = function( update ) {
@@ -75,7 +78,7 @@ function Lobby( domElements ) {
 		if ( !update ) {
 			registerPlayer( );
 			
-			networkHandler.send(
+			var game =
 				{
 					type: "HOST",
 					game:
@@ -88,13 +91,12 @@ function Lobby( domElements ) {
 									maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
 								}
 						}
-				}
-			);
+				};
+			
+			networkHandler.send( game );
+			$.cookie( "game", JSON.stringify( game ) );
 		} else {
-			console.log( update );
-			console.log( JSON.stringify( update ) );
-//			$.cookie( "game", JSON.stringify( update ) );
-//			document.location = "game-multiplayer.html";
+			document.location = "game-multiplayer.html";
 		}
 	};
 	
