@@ -26,7 +26,9 @@ function Lobby( domElements ) {
 		
 		networkHandler.addObserver( "CURRENT GAMES", initGames );
 		networkHandler.send( { type: "CURRENT GAMES" } );
-		
+
+		networkHandler.addObserver( "ADD GAME", editGames );
+		networkHandler.addObserver( "REMOVE GAME", editGames );
 		networkHandler.addObserver( "HOST", function( ) {
 			document.location = "game-multiplayer.html";
 		} );
@@ -40,11 +42,20 @@ function Lobby( domElements ) {
 		
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
-			var game = games[ i ];
-			
-			console.log( game );
-			
-			if ( game.name && game.id ) {
+			editGames(
+				{
+					type: "ADD GAME",
+					game: games[ i ]
+				}
+			);
+		}
+	}
+	
+	function editGames( update ) {
+		if ( update.type ) {
+			if ( update.type == "ADD GAME" ) {
+				var game = update.game;
+				
 				var liItem = document.createElement( "li" );
 				liItem.value = game.id;
 				liItem.className = (i % 2 == 0) ? "even" : "odd";
@@ -56,6 +67,18 @@ function Lobby( domElements ) {
 				liItem.appendChild( a );
 				
 				domElements.gamelist.appendChild( liItem );
+			} else if ( update.type == "REMOVE GAME" ) {
+				var game = update.game;
+				
+				var liItems = domElements.gamelist.getElementsByTagName( "li" );
+				for ( var i = 0; i < li.length; i++ ){
+					var liItem = liItems[ i ];
+					
+					if ( liItem.value == game.id ) {
+						domElements.gamelist.removeChild( liItem );
+						break;
+					}
+				}
 			}
 		}
 	}
