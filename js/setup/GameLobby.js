@@ -31,6 +31,8 @@ function GameLobby( domElements ) {
 			join = $.cookie( "join" ),
 			game;
 		
+		console.log(host);
+		console.log(join);
 		if ( host ) {
 			game = JSON.parse( host );
 			networkHandler.send( { type: "HOST", game: game } );
@@ -40,6 +42,7 @@ function GameLobby( domElements ) {
 		}
 
 		var player = $.cookie( "player" );
+		console
 		if ( player ) {
 			self.addLocalPlayer( JSON.parse( player ) );
 		}
@@ -88,6 +91,7 @@ function GameLobby( domElements ) {
 		loadPlayer( player ,
 			function( ) {
 				// TODO: CREATE LOCAL CURVE
+				networkHandler.send( { type: "NEW PLAYER", player: player } );
 				
 				addPlayers(
 					{
