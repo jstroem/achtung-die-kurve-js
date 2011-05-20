@@ -29,18 +29,20 @@ function GameLobby( domElements ) {
 			player = JSON.parse( $.cookie( "player" ) ),
 			game;
 		
-		if ( host ) {
-			networkHandler.send( { type: "HOST", game: JSON.parse( host ), player: player } );
-			$.cookie( "host", null );
-		} else {
-			networkHandler.send( { type: "JOIN", game: JSON.parse( join ), player: player } );
-			$.cookie( "join", null );
-
-			networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
-			networkHandler.send( { type: "CURRENT PLAYERS" } );
-		}
+		self.addLocalPlayer( player,
+			function( ) {
+				if ( host ) {
+					networkHandler.send( { type: "HOST", game: JSON.parse( host ), player: player } );
+					$.cookie( "host", null );
+				} else {
+					networkHandler.send( { type: "JOIN", game: JSON.parse( join ), player: player } );
+					$.cookie( "join", null );
 		
-		self.addLocalPlayer( player );
+					networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
+					networkHandler.send( { type: "CURRENT PLAYERS" } );
+				}
+			}
+		);
 	};
 	
 	function addPlayers( update ) {
@@ -82,18 +84,15 @@ function GameLobby( domElements ) {
 		}
 	}
 	
-	this.addLocalPlayer = function( player ) {
+	this.addLocalPlayer = function( player, callback ) {
 		loadPlayer( player ,
 			function( ) {
 				// TODO: CREATE LOCAL CURVE
-				networkHandler.send( { type: "NEW PLAYER", player: player } );
+				addPlayers( player );
 				
-				addPlayers(
-					{
-						name: player.name,
-						id: player.id
-					}
-				);
+				if ( typeof callback == "function" ) {
+					callback( player );
+				}
 			}
 		);
 	};
