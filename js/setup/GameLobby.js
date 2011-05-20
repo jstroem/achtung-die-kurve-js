@@ -31,20 +31,18 @@ function GameLobby( domElements ) {
 			join = $.cookie( "join" ),
 			game;
 		
-		console.log(host);
-		console.log(join);
 		if ( host ) {
-			game = JSON.parse( host );
-			networkHandler.send( { type: "HOST", game: game } );
+			networkHandler.send( { type: "HOST", game: JSON.parse( host ) } );
+			$.cookie( "host", null );
 		} else {
-			game = JSON.parse( join );
-			networkHandler.send( { type: "JOIN", game: game } );
-		}
-
-		var player = $.cookie( "player" );
-		console.log(player);
-		if ( player ) {
-			self.addLocalPlayer( JSON.parse( player ) );
+			networkHandler.send( { type: "JOIN", game: JSON.parse( join ) } );
+			$.cookie( "join", null );
+			
+			var player = $.cookie( "player" );
+			if ( player ) {
+				self.addLocalPlayer( JSON.parse( player ) );
+				$.cookie( "player", null );
+			}
 		}
 	};
 	
