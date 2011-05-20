@@ -128,8 +128,11 @@ function loadPlayer( player, callback ) {
 		player.color = prompt( "Choose a color." );
 	}
 	if ( !player.keys ) {
-		player.keys.left == -1;
-		player.keys.right == -1;
+		player.keys =
+			{
+				left: -1,
+				right: -1
+			};
 	}
 	if ( player.keys.left == -1 || player.keys.right == -1 ) {
 		alert( "Press left-key." );
