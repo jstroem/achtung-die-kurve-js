@@ -122,12 +122,15 @@ function GameLobby( domElements ) {
 
 function loadPlayer( player, callback ) {
 	if ( !player.name ) {
-		self.nickname = prompt( "Choose a nickname." );
+		player.nickname = prompt( "Choose a nickname." );
 	}
 	if ( !player.color ) {
-		self.color = prompt( "Choose a color." );
+		player.color = prompt( "Choose a color." );
 	}
-	
+	if ( !player.keys ) {
+		player.keys.left == -1;
+		player.keys.right == -1;
+	}
 	if ( player.keys.left == -1 || player.keys.right == -1 ) {
 		alert( "Press left-key." );
 		document.onkeydown = function( e ) {
