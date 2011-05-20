@@ -14,17 +14,9 @@
 		
 		<script src="http://jstroem.com:8998/socket.io/socket.io.js" type="text/javascript"></script>
 		
- 		<script src="js/other/common.js" type="text/javascript"></script>´
- 		
- 		<script type="text/javascript">
- 			console.log( $.cookie( "player" ) );
- 			console.log( $.cookie( "game" ) );
- 			
- 			var player = JSON.parse( $.cookie( "player" ) );
- 			var game = JSON.parse( $.cookie( "game" ) ); 
- 			console.log( player );
- 			console.log( game );
- 		</script>
+ 		<script src="js/other/common.js" type="text/javascript"></script>
+ 		<script src="js/communication/NetworkHandler.js" type="text/javascript"></script>
+ 		<script src="js/setup/GameLobby.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -38,14 +30,42 @@
 			</div>
 			<div class="separator">&nbsp;</div>
 			<div class="col">
-				<a class="newplayer button box" href="JavaScript: pg.addLocalPlayer( new Player ( ) );">New Player</a>
+				<a id="addPlayer" class="newplayer button box" href="JavaScript: gamelobby.addPlayer( );">Add Player</a>
 				<div class="players darkbox">
 					<ul id="playerlist">
 					</ul>
 				</div>
-				<a class="start button box" href="JavaScript: pg.voteStart( );">Start</a>
+				<a id="start" class="start button box" href="JavaScript: gamelobby.voteStart( );">Start</a>
 			</div>
 			<div class="floatbreaker"></div>
 		</div>
+		<script type="text/javascript">
+			var gamelobby = new GameLobby(
+				{
+					game: document.getElementById( "game" ),
+					playerlist: document.getElementById( "playerlist" ),
+					buttons:
+						{
+							addPlayer: document.getElementById( "addPlayer" ),
+							start: document.getElementById( "start" )
+						}
+				}
+			);
+			
+			/*
+			player:
+				{
+					name: domElements.player.name.value,
+					id: "P" + (new Date).getTime( )
+				}
+			*/
+ 			var player = JSON.parse( $.cookie( "player" ) );
+ 			gamelobby.addLocalPlayer( player );
+ 			 
+ 			var game = JSON.parse( $.cookie( "game" ) );
+ 			
+ 			// console.log( player );
+ 			// console.log( game );
+		</script>
 	</body>
 </html>

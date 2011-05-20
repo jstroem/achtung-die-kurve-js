@@ -14,12 +14,9 @@
 		
  		<script src="http://jstroem.com:8998/socket.io/socket.io.js" type="text/javascript"></script>
  		
- 		<!-- <script src="js/other/json.js" type="text/javascript"></script> -->
 		<script src="js/other/common.js" type="text/javascript"></script>
-		
+		<script src="js/communication/NetworkHandler.js" type="text/javascript"></script>
 		<script src="js/setup/Lobby.js" type="text/javascript"></script>
-		
-		<script src="js/NetworkHandler.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -35,16 +32,9 @@
 			<div class="container">
 				<div class="col">
 					<h2>Open games</h2>
-					<div class="col">
-						<div class="games darkbox">
-							<ul id="gamelist"></ul>
-						</div>
+					<div class="games darkbox">
+						<ul id="gamelist"></ul>
 					</div>
-					<div class="separator">&nbsp;</div>
-					<div class="col">
-						<a class="join button box" href="JavaScript: lobby.join( );">Join Game</a>
-					</div>
-					<div class="floatbreaker"></div>
 				</div>
 				<div class="separator">&nbsp;</div>
 				<div class="col">
@@ -78,15 +68,15 @@
 			var lobby = new Lobby(
 				{
 					gamelist: document.getElementById( "gamelist" ),
-					nickname: document.getElementById( "field_name_nick" ),
-					singleplayer: document.getElementById( "field_options_singleplayer" ),
-					options:
+					player:
 						{
-							wallsOn: document.getElementById( "field_options_walls" )
+							name: document.getElementById( "field_name_nick" ) 
 						},
-					multiplayerOptions:
+					game:
 						{
-							gameName: document.getElementById( "field_name_game" ),
+							name: document.getElementById( "field_name_game" ),
+							singleplayer: document.getElementById( "field_options_singleplayer" ),
+							wallsOn: document.getElementById( "field_options_walls" ),
 							maxNoOfPlayers: document.getElementById( "field_options_maxplayers" )
 						}
 				}

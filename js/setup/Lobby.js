@@ -3,15 +3,15 @@
  * @param
  * 		{
  * 			gamelist: <ul>,
- * 			nickname: <input type="text">,
- * 			singleplayer: <input type="checkbox">,
- * 			options:
+ * 			player:
  * 				{
- * 					wallsOn: <input type="checkbox">
- * 				}
- * 			multiplayerOptions:
+ * 					name: <input type="text">
+ * 				},
+ * 			game:
  * 				{
- * 					gameName: <input type="text">,
+ * 					name: <input type="text">,
+ * 					singleplayer: <input type="checkbox">,
+ * 					wallsOn: <input type="checkbox">,
  * 					maxNoOfPlayers: <input type="text">
  * 				}
  * 		} domElements
@@ -23,45 +23,62 @@ function Lobby( domElements ) {
 	
 	function init( ) {
 		networkHandler = new NetworkHandler( );
-		networkHandler.addObserver( "CURRENT GAMES", updateGames );
+		
+		networkHandler.addObserver( "CURRENT GAMES", initGames );
+		networkHandler.send( { type: "CURRENT GAMES" } );
+
+		networkHandler.addObserver( "ADD GAME", editGames );
+		networkHandler.addObserver( "REMOVE GAME", editGames );
 		networkHandler.addObserver( "HOST", function( ) {
 			document.location = "game-multiplayer.html";
 		} );
-		
-		self.refresh( );
+		networkHandler.addObserver( "JOIN", function( ) {
+			document.location = "game-multiplayer.html";
+		} );
 	}
 	
-	this.refresh = function( ) {
-		networkHandler.send( { type: "CURRENT GAMES" } );
-	};
-	
-	function updateGames( update ) {
+	function initGames( update ) {
 		domElements.gamelist.innerHTML = "";
 		
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
-			var game = games[ i ];
-			
-			console.log( game );
-			
-			if ( game.name && game.id ) {
+			editGames(
+				{
+					type: "ADD GAME",
+					game: games[ i ]
+				}
+			);
+		}
+	}
+	
+	function editGames( update ) {
+		if ( update.type ) {
+			if ( update.type == "ADD GAME" ) {
+				var game = update.game;
+				
 				var liItem = document.createElement( "li" );
 				liItem.value = game.id;
 				liItem.className = (i % 2 == 0) ? "even" : "odd";
 				
-				var aLeft = document.createElement( "a" );
-				aLeft.innerHTML = game.name;
-				aLeft.className = "left";
+				var a = document.createElement( "a" );
+				a.href = "JavaScript: lobby.join( '" + game.id + "' );";
+				a.innerHTML = game.name + " (" + game.noOfPlayers + " / " + game.maxNoOfPlayers + ")";
 				
-				var aRight = document.createElement( "a" );
-				aRight.innerHTML = game.noOfPlayers + " / " + game.maxNoOfPlayers;
-				aRight.className = "right";
-				aRight.style.color = (game.noOfPlayers == game.maxNoOfPlayers) ? "red" : "green" ;
-				
-				liItem.appendChild( aLeft );
-				liItem.appendChild( aRight );
+				liItem.appendChild( a );
 				
 				domElements.gamelist.appendChild( liItem );
+			} else if ( update.type == "REMOVE GAME" ) {
+				var game = update.game;
+				
+				var liItems = domElements.gamelist.getElementsByTagName( "li" );
+				for ( var i = 0; i < li.length; i++ ){
+					var liItem = liItems[ i ];
+					
+					if ( liItem.value == game.id ) {
+						domElements.gamelist.removeChild( liItem );
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -72,14 +89,14 @@ function Lobby( domElements ) {
 				type: "NEW PLAYER",
 				player:
 					{
-						name: domElements.nickname.value,
+						name: domElements.player.name.value,
 						id: "P" + (new Date).getTime( )
 					}
 			};
 		
-		$.cookie( "player", JSON.stringify( player ) );
+		$.cookie( "player", JSON.stringify( player.player ) );
 		
-		if ( !domElements.singleplayer.checked ) {
+		if ( !domElements.game.singleplayer.checked ) {
 			networkHandler.send( player );
 		}
 	}
@@ -87,7 +104,7 @@ function Lobby( domElements ) {
 	this.host = function( ) {
 		registerPlayer( );
 		
-		if ( domElements.singleplayer.checked ) {
+		if ( domElements.game.singleplayer.checked ) {
 			document.location = "game-singleplayer.html";
 		} else {
 			var game =
@@ -95,23 +112,26 @@ function Lobby( domElements ) {
 					type: "HOST",
 					game:
 						{
-							name: domElements.multiplayerOptions.gameName.value,
+							name: domElements.game.name.value,
 							id: "G" + (new Date).getTime( ),
 							
 							// Options:
 							public: 1,
-							wallsOn: domElements.options.wallsOn.checked,
-							maxNoOfPlayers: domElements.multiplayerOptions.maxNoOfPlayers.value
+							wallsOn: domElements.game.wallsOn.checked,
+							maxNoOfPlayers: domElements.game.maxNoOfPlayers.value
 						}
 				};
 			
-			$.cookie( "game", JSON.stringify( game ) );
+			$.cookie( "game", JSON.stringify( game.game ) );
 			
 			networkHandler.send( game );
 		}
 	};
 	
-	this.join = function( ) {
+	this.join = function( id ) {
+		registerPlayer( );
+		
+		networkHandler.send( { type: "JOIN", id: id } );
 	};
 	
 	init ( );
