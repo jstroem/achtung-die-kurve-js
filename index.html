@@ -41,14 +41,14 @@
 					<h2>Host game</h2>
 					<div class="host box">
 						<div>
-							<input id="field_options_singleplayer" name="options_singleplayer" type="checkbox" checked="checked" />
+							<input id="field_options_singleplayer" name="options_singleplayer" type="checkbox" />
 							<label for="field_options_singleplayer">Singleplayer</label>
 						</div>
 						<div>
 							<input id="field_options_walls" name="options_walls" type="checkbox" />
 							<label for="field_options_walls">Walls on</label>
 						</div>
-						<div id="multiplayer_options" style="display: none;">
+						<div id="multiplayer_options">
 							<div>
 								<label for="field_name_game">Choose a gamename:</label>
 								<input id="field_name_game" name="name_game" type="text" value="Player's game" />
@@ -58,6 +58,11 @@
 								<input id="field_options_maxplayers" name="options_maxplayers" type="text" value="6" />
 							</div>
 						</div>
+						<script type="text/javascript">
+							document.getElementById("field_options_singleplayer").onclick = function() {
+								document.getElementById("multiplayer_options").style.display = ( this.checked ) ? "none" : "block";
+							};
+						</script>
 					</div>
 					<a class="host button box" href="JavaScript: lobby.host( );">Host New Game</a>
 				</div>

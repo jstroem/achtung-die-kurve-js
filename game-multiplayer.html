@@ -51,21 +51,6 @@
 						}
 				}
 			);
-			
-			/*
-			player:
-				{
-					name: domElements.player.name.value,
-					id: "P" + (new Date).getTime( )
-				}
-			*/
- 			var player = JSON.parse( $.cookie( "player" ) );
- 			gamelobby.addLocalPlayer( player );
- 			 
- 			var game = JSON.parse( $.cookie( "game" ) );
- 			
- 			// console.log( player );
- 			// console.log( game );
 		</script>
 	</body>
 </html>

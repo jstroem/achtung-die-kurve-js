@@ -26,6 +26,23 @@ function GameLobby( domElements ) {
 		networkHandler.addObserver( "PLAYER JOINED", addPlayers );
 		networkHandler.addObserver( "PLAYER LEFT", deletePlayer );
 		networkHandler.addObserver( "START GAME", startGame );
+		
+		var host = $.cookie( "host" ),
+			join = $.cookie( "join" ),
+			game;
+		
+		if ( host ) {
+			game = JSON.parse( host );
+			networkHandler.send( { type: "HOST", game: game } );
+		} else {
+			game = JSON.parse( join );
+			networkHandler.send( { type: "JOIN", game: game } );
+		}
+
+		var player = $.cookie( "player" );
+		if ( player ) {
+			self.addLocalPlayer( JSON.parse( player ) );
+		}
 	};
 	
 	function addPlayers( update ) {

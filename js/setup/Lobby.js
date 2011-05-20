@@ -29,9 +29,6 @@ function Lobby( domElements ) {
 
 		networkHandler.addObserver( "ADD GAME", editGames );
 		networkHandler.addObserver( "REMOVE GAME", editGames );
-		networkHandler.addObserver( "HOST", function( ) {
-			document.location = "game-multiplayer.html";
-		} );
 		networkHandler.addObserver( "JOIN", function( ) {
 			document.location = "game-multiplayer.html";
 		} );
@@ -122,16 +119,18 @@ function Lobby( domElements ) {
 						}
 				};
 			
-			$.cookie( "game", JSON.stringify( game.game ) );
+			$.cookie( "host", JSON.stringify( game.game ) );
 			
-			networkHandler.send( game );
+			document.location = "game-multiplayer.html";
 		}
 	};
 	
-	this.join = function( id ) {
+	this.join = function( gameId ) {
 		registerPlayer( );
 		
-		networkHandler.send( { type: "JOIN", id: id } );
+		$.cookie( "join", JSON.stringify( { id: gameId } ) );
+		
+		document.location = "game-multiplayer.html";
 	};
 	
 	init ( );
