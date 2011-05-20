@@ -20,30 +20,27 @@ function GameLobby( domElements ) {
 	function init( ) {
 		networkHandler = new NetworkHandler( );
 		
-		networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
-		networkHandler.send( { type: "CURRENT PLAYERS" } );
-		
 		networkHandler.addObserver( "PLAYER JOINED", addPlayers );
 		networkHandler.addObserver( "PLAYER LEFT", deletePlayer );
 		networkHandler.addObserver( "START GAME", startGame );
 		
 		var host = $.cookie( "host" ),
 			join = $.cookie( "join" ),
+			player = JSON.parse( $.cookie( "player" ) ),
 			game;
 		
 		if ( host ) {
-			networkHandler.send( { type: "HOST", game: JSON.parse( host ) } );
+			networkHandler.send( { type: "HOST", game: JSON.parse( host ), player: player } );
 			$.cookie( "host", null );
 		} else {
-			networkHandler.send( { type: "JOIN", game: JSON.parse( join ) } );
+			networkHandler.send( { type: "JOIN", game: JSON.parse( join ), player: player } );
 			$.cookie( "join", null );
-			
-			var player = $.cookie( "player" );
-			if ( player ) {
-				self.addLocalPlayer( JSON.parse( player ) );
-				$.cookie( "player", null );
-			}
+
+			networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
+			networkHandler.send( { type: "CURRENT PLAYERS" } );
 		}
+		
+		self.addLocalPlayer( player );
 	};
 	
 	function addPlayers( update ) {
