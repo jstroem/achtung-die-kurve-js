@@ -42,7 +42,7 @@ function GameLobby( domElements ) {
 		}
 
 		var player = $.cookie( "player" );
-		console
+		console.log(player);
 		if ( player ) {
 			self.addLocalPlayer( JSON.parse( player ) );
 		}
