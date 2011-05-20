@@ -10,11 +10,15 @@ var achtungSocket = {
                 switch ( msg.type ) {
                     case "NEW PLAYER" : 
                     
-                        if ( msg.playerid !== undefined && msg.playerid !== null ) {
+                        if ( msg.player !== undefined && msg.player !== null ) {
                             //check if user is in use.
-                            client.playerid = msg.playerid;
+                            if (msg.player.id !== undefined && msg.player.id !== null ) {
+                                client.playerid = msg.playerid;
+                            } else {
+                                achtungSocket.sendErrorMessage( client, 1, "Player object was missing id" );   
+                            }
                         } else {
-                            achtungSocket.sendErrorMessage( client, 1, "Playerid was missing" );
+                            achtungSocket.sendErrorMessage( client, 1, "Player object was missing" );
                         }; 
                     break;
                     
@@ -35,10 +39,12 @@ var achtungSocket = {
                     
                     case "CURRENT GAMES" :
                         achtungSocket.sendCurrentGames( client );
+                        console.log( achtungSocket.games );
                     break;
                     
                     case "HOST" :
                         achtungSocket.newGameHosted( client, msg );
+                        console.log( achtungSocket.games );
                     break;
                     
                     case "VOTE START" :
@@ -78,10 +84,11 @@ var achtungSocket = {
     },
     
     sendCurrentGames: function ( client ) {
-        var availGames = [], game;
-        for ( game in achtungSocket.games ) {
-            if ( game.public == 1 ) {
-                availGames.push( game );
+        var availGames = [], gameid;
+        for ( gameid in achtungSocket.games ) {
+            console.log( "game:", achtungSocket.games[ gameid ] );
+            if ( achtungSocket.games[ gameid ].public === 1 ) {
+                availGames.push( achtungSocket.games[ gameid ] );
             }
         }
         client.send ( { type: "CURRENT GAMES", games: availGames } );
