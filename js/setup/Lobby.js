@@ -92,10 +92,6 @@ function Lobby( domElements ) {
 			};
 		
 		$.cookie( "player", JSON.stringify( player.player ) );
-		
-		if ( !domElements.game.singleplayer.checked ) {
-			networkHandler.send( player );
-		}
 	}
 	
 	this.host = function( ) {
