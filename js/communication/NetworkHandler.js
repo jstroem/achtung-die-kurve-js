@@ -57,21 +57,6 @@ function NetworkHandler( ) {
 		}
 	};
 	
-//	this.sendGameUpdate = function( curve ) {
-//		this.send( {
-//			tombstone: curve.isDead,
-//			pos: {
-//				row: curve.pos.row,
-//				col: curve.pos.col
-//			},
-//			lastpos: {
-//				row: curve.lastpos.row,
-//				col: curve.lastpos.col
-//			},
-//			color: curve.color
-//		} );
-//	};
-	
 	this.send = function( msg ) {
 		console.log( "SEND:" );
 		console.log( msg );

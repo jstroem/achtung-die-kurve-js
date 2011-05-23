@@ -14,8 +14,8 @@
  */
 function GameLobby( domElements ) {
 	var self = this,
-		localCurves = [],
-		networkHandler = null;
+		localPlayers = [],
+		networkHandler;
 	
 	function init( ) {
 		networkHandler = new NetworkHandler( );
@@ -88,6 +88,8 @@ function GameLobby( domElements ) {
 		loadPlayer( player ,
 			function( ) {
 				// TODO: CREATE LOCAL CURVE
+				localPlayers.push( player );
+				
 				addPlayers( player );
 				
 				if ( typeof callback == "function" ) {
@@ -101,14 +103,15 @@ function GameLobby( domElements ) {
 		networkHandler.send( { type: "START" } );
 	};
 	
-	function startGame( update ) {
-		for ( var i = 0; i < localCurves.length; i++ ) {
-			var randomPos = new Point( getRandom( 1, 500, true ), getRandom( 1, 500, true ) );
+	function startGame( ) {
+		var curves = [];
+		for ( var i = 0; i < localPlayers.length; i++ ) {
+			var randomPos = new Point( getRandom( 21, 480, true ), getRandom( 21, 480, true ) );
 			var randomDir = new Vector( getRandom( -1, 1, false ), getRandom( -1, 1, false ) ).normalize();
-			game.addCurve( new Curve( locals[i].color, randomPos, randomDir, locals[i].keys ) );
+			curves.push ( new Curve( localPlayers[ i ].color, randomPos, randomDir, localPlayers[ i ].keys ) );
 		}
 		
-		game.world.start( );
+		new Game( domElements.game, curves, networkHandler ).world.start( );
 	}
 	
 	init( );

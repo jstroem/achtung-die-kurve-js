@@ -7,7 +7,7 @@
  * 		void blockTile ( int row, int col, Curve curve )	
  */
 
-function World ( game ) {
+function World ( game, networkHandler ) {
 	var self = this, // To be used in private-methods.
 		options = {
 			height: 500,
@@ -16,7 +16,8 @@ function World ( game ) {
 			background: "#000000",
 			fps: 60
 		},
-		blockedTiles = new Array( );
+		blockedTiles = [],
+		pendingUpdates = [];
 	
 	/**
 	 * @private
@@ -26,9 +27,14 @@ function World ( game ) {
 	 */
 	function init ( ) {
 		
+		// Listen to updates
+		if ( networkHandler ) {
+			networkHandler.addObserver( "GAME UPDATE", handlePendingUpdates );
+		}
+		
 		// Initialize data structures
 		for ( var i = 0; i < options.height; i++ ) {
-			blockedTiles.push( new Array( ) ); // for each pixel in height: add array for a row
+			blockedTiles.push( [] ); // for each pixel in height: add array for a row
 		}
 		
 		// Initialize Canvas DOM
@@ -53,26 +59,79 @@ function World ( game ) {
 			if ( !isTileBlocked( curve.pos, curve.dir ) ) {
 				blockTile( curve.pos );
 			} else if ( !curve.pos.equals( curve.lastpos, false ) ) {
-				// Draw a rectangle to indicate dead
-				game.drawer.drawRectangle( curve.pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
-				
 				// Kill
 				game.killCurve( null, i );
 				i--;
 			}
 			
-			// Draw a circle
-			if ( !curve.isDead ) {
-				game.drawer.drawCircle( curve.lastpos, options.curveRadius, curve.color );
-				game.drawer.drawCircle( curve.pos, options.curveRadius, "yellow" );
-			}
+			// Draw
+			updateCanvas( curve );
 			
-			// Propagate updates
-			if ( game.networkHandler ) {
-				game.networkHandler.sendGameUpdate( curve );
-			}
+			// Update
+			addPendingUpdate( curve );
 		}
+		
+		propagateUpdates( );
 	};
+	
+	function updateCanvas( curve, pos, lastpos, color, isDead ) {
+		if ( curve && curve != null ) {
+			pos = curve.pos;
+			lastpos = curve.lastpos;
+			color = curve.color;
+			isDead = curve.isDead;
+		}
+		
+		if ( curve.isDead ) {
+			game.drawer.drawRectangle( pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
+		} else {
+			game.drawer.drawCircle( lastpos, options.curveRadius, color );
+			game.drawer.drawCircle( pos, options.curveRadius, "yellow" );
+		}
+	}
+	
+	function addPendingUpdate( curve ) {
+		pendingUpdates.push(
+			{
+				tombstone: curve.isDead,
+				pos: {
+					row: curve.pos.row,
+					col: curve.pos.col
+				},
+				lastpos: {
+					row: curve.lastpos.row,
+					col: curve.lastpos.col
+				},
+				color: curve.color
+			}
+		);
+	}
+	
+	function propagateUpdates( ) {
+		networkHandler.send(
+			{
+				type: "GAME UPDATE",
+				updates: pendingUpdates
+			}
+		);
+		pendingUpdates = [];
+		
+	}
+	
+	function handlePendingUpdates( update ) {
+		if ( !update.updates ) {
+			return;
+		}
+		
+		for ( var i = 0; i < update.updates.length; i++ ) {
+			var curveInfo = update.updates[ i ];
+			var pos = new Point( curveInfo.pos.row, curveInfo.pos.col );
+			var lastpos = new Point( curveInfo.lastpos.row, curveInfo.lastpos.col );
+			
+			blockTile( pos );
+			updateCanvas( null, pos, lastpos, curveInfo.color, curveInfo.tombstone );
+		}
+	}
 	
 	/**
 	 * @private

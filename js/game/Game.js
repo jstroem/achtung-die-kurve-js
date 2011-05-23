@@ -5,34 +5,12 @@
  * @methods
  * 		void addCurve ( Curve curve )
  */
-function Game ( canvasDOM, singleplayer ) {
+function Game ( canvasDOM, curves, networkHandler ) {
 	var self = this;
 	
-	this.drawer = new Drawer( canvasDOM );
-	this.world = new World ( this ),
-	this.curves = [],
-	this.networkHandler;
-	
-	/**
-	 * @private
-	 * @method Initializes the Game.
-	 * @return void
-	 */
-	function init( ) {
-		if ( !singleplayer ) {
-			self.networkHandler = new NetworkHandler( self );
-		}
-	}
-	
-	/**
-	 * @public
-	 * @method Adds a curve to the world.
-	 * @return void
-	 * @param { Curve } curve
-	 */
-	this.addCurve = function ( curve ) {
-		this.curves.push ( curve );
-	};
+	this.drawer = new Drawer( canvasDOM ),
+	this.world = new World ( this, networkHandler ),
+	this.curves = curves;
 	
 	/**
 	 * @method Kills the curve, i.e. stops it
@@ -53,6 +31,4 @@ function Game ( canvasDOM, singleplayer ) {
 			this.curves.splice( i, 1 );
 		}
 	};
-	
-	init( );
 };
