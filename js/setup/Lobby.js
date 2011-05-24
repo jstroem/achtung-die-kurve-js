@@ -19,24 +19,29 @@
  */
 function Lobby( domElements ) {
 	var self = this,
-		networkHandler = null;
+		networkHandler;
 	
 	function init( ) {
+		// Initialize objects
 		networkHandler = new NetworkHandler( );
 		
+		// Add observers
 		networkHandler.addObserver( "CURRENT GAMES", initGames );
-		networkHandler.send( { type: "CURRENT GAMES" } );
-
 		networkHandler.addObserver( "ADD GAME", editGames );
 		networkHandler.addObserver( "REMOVE GAME", editGames );
 		networkHandler.addObserver( "JOIN", function( ) {
 			document.location = "game-multiplayer.html";
 		} );
+		
+		// Get open games
+		networkHandler.send( { type: "CURRENT GAMES" } );
 	}
 	
 	function initGames( update ) {
+		// Clear the <UL>-list
 		domElements.gamelist.innerHTML = "";
 		
+		// Iterate through the received games (from the server), and add them to the <UL>-list
 		var games = update.games;
 		for ( var i = 0; i < games.length; i++ ) {
 			editGames(
@@ -83,50 +88,38 @@ function Lobby( domElements ) {
 	function registerPlayer( ) {
 		var player =
 			{
-				type: "NEW PLAYER",
-				player:
-					{
-						name: domElements.player.name.value,
-						id: "P" + (new Date).getTime( )
-					}
+				name: domElements.player.name.value,
+				id: "P" + (new Date).getTime( )
 			};
 		
-		$.cookie( "player", JSON.stringify( player.player ) );
+		$.cookie( "player", JSON.stringify( player ) );
 	}
 	
 	this.host = function( ) {
 		registerPlayer( );
 		
-		if ( domElements.game.singleplayer.checked ) {
-			document.location = "game-singleplayer.html";
-		} else {
-			var game =
-				{
-					type: "HOST",
-					game:
-						{
-							name: domElements.game.name.value,
-							id: "G" + (new Date).getTime( ),
-							
-							// Options:
-							public: 1,
-							wallsOn: domElements.game.wallsOn.checked,
-							maxNoOfPlayers: domElements.game.maxNoOfPlayers.value
-						}
-				};
-			
-			$.cookie( "host", JSON.stringify( game.game ) );
-			
-			document.location = "game-multiplayer.html";
-		}
+		var game =
+			{
+				name: domElements.game.name.value,
+				id: "G" + (new Date).getTime( ),
+				
+				singleplayer: domElements.game.singleplayer.checked,
+				
+				// Options:
+				public: 1, // TODO: Add this parameter to the GUI
+				wallsOn: domElements.game.wallsOn.checked, // TODO: Add this parameter to the game
+				maxNoOfPlayers: domElements.game.maxNoOfPlayers.value
+			};
+
+		$.cookie( "host", JSON.stringify( game ) );
+		document.location = "game.html";
 	};
 	
 	this.join = function( gameId ) {
 		registerPlayer( );
 		
 		$.cookie( "join", JSON.stringify( { id: gameId } ) );
-		
-		document.location = "game-multiplayer.html";
+		document.location = "game.html";
 	};
 	
 	init ( );

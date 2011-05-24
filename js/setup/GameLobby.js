@@ -15,28 +15,48 @@
 function GameLobby( domElements ) {
 	var self = this,
 		localPlayers = [],
-		networkHandler;
+		networkHandler,
+		game;
 	
 	function init( ) {
-		networkHandler = new NetworkHandler( );
+		var host = ( $.cookie( "host" ) ) ? JSON.parse( $.cookie( "host" ) ) : undefined,
+			join = ( $.cookie( "join" ) ) ? JSON.parse( $.cookie( "join" ) ) : undefined,
+			player = ( $.cookie( "player" ) ) ? JSON.parse( $.cookie( "player" ) ) : undefined,
+			gameInfo = host || join;
 		
+		alert(host);
+		alert(join);
+//		$.cookie( "host", null );
+//		$.cookie( "join", null );
+//		$.cookie( "player", null );
+		
+		// Check that the user came from the lobby, i.e. "index.html"
+		if ( !player || !gameInfo ) {
+			// Redirect the user (options as wallsOn must are mandatory)
+			// document.location = "index.html";
+		}
+		
+		// Initialize objects
+		if ( gameInfo.singleplayer ) {
+			networkHandler = new NetworkHandlerSingleplayer( );
+		} else {
+			networkHandler = new NetworkHandler( );
+		}
+		
+		game = new Game( domElements.game, networkHandler );
+		
+		// Add observers to connection
 		networkHandler.addObserver( "PLAYER JOINED", addPlayers );
 		networkHandler.addObserver( "PLAYER LEFT", deletePlayer );
 		networkHandler.addObserver( "START GAME", startGame );
 		
-		var host = $.cookie( "host" ),
-			join = $.cookie( "join" ),
-			player = JSON.parse( $.cookie( "player" ) ),
-			game;
-		
+		// Add player (i.e. the one who hosted/joined)
 		self.addLocalPlayer( player,
 			function( ) {
 				if ( host ) {
-					networkHandler.send( { type: "HOST", game: JSON.parse( host ), player: player } );
-					$.cookie( "host", null );
+					networkHandler.send( { type: "HOST", game: gameInfo, player: player } );
 				} else {
-					networkHandler.send( { type: "JOIN", game: JSON.parse( join ), player: player } );
-					$.cookie( "join", null );
+					networkHandler.send( { type: "JOIN", game: gameInfo, player: player } );
 		
 					networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
 					networkHandler.send( { type: "CURRENT PLAYERS" } );
@@ -64,7 +84,6 @@ function GameLobby( domElements ) {
 			liItem.className = (i % 2 == 0) ? "even" : "odd";
 			
 			var a = document.createElement( "a" );
-			// a.href = "JavaScript: lobby.join( '" + game.id + "' );";
 			a.innerHTML = player.name;
 			
 			liItem.appendChild( a );
@@ -87,7 +106,6 @@ function GameLobby( domElements ) {
 	this.addLocalPlayer = function( player, callback ) {
 		loadPlayer( player ,
 			function( ) {
-				// TODO: CREATE LOCAL CURVE
 				localPlayers.push( player );
 				
 				addPlayers( player );
@@ -104,14 +122,12 @@ function GameLobby( domElements ) {
 	};
 	
 	function startGame( ) {
-		var curves = [];
 		for ( var i = 0; i < localPlayers.length; i++ ) {
 			var randomPos = new Point( getRandom( 21, 480, true ), getRandom( 21, 480, true ) );
 			var randomDir = new Vector( getRandom( -1, 1, false ), getRandom( -1, 1, false ) ).normalize();
-			curves.push ( new Curve( localPlayers[ i ].color, randomPos, randomDir, localPlayers[ i ].keys ) );
+			game.curves.push( new Curve( localPlayers[ i ].color, randomPos, randomDir, localPlayers[ i ].keys ) );
 		}
-		
-		new Game( domElements.game, curves, networkHandler ).world.start( );
+		game.world.start( );
 	}
 	
 	init( );

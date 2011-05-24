@@ -17,7 +17,7 @@ function NetworkHandler( ) {
 	 */
 	function init( ) {
 		// Initialize socket
-		socket = new io.Socket( null,
+		socket = new io.Socket( "http://jstroem.com:8998",
 			{
 				port: port,
 				rememberTransport: false
@@ -58,10 +58,15 @@ function NetworkHandler( ) {
 	};
 	
 	this.send = function( msg ) {
-		console.log( "SEND:" );
-		console.log( msg );
-		
-		socket.send( msg );
+		if ( socket ) {
+			console.log( "SEND:" );
+			console.log( msg );
+			
+			socket.send( msg );
+		} else {
+			console.log( "SEND [socket closed]:" );
+			console.log( msg );
+		}
 	};
 	
 	function receive( update ) {
