@@ -3,7 +3,7 @@
  * @classDescription Handles network trafic.
  * @constructor networkOptions
  */
-function NetworkHandler( ) {
+function NetworkHandlerSingleplayer( ) {
 	var self = this,
 		observers = [];
 	

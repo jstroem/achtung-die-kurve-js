@@ -8,15 +8,26 @@
 		
 		<script src="https://www.google.com/jsapi" type="text/javascript"></script>
 		<script type="text/javascript">
-			google.load( "jquery", "1.6.0" );	
+			google.load( "jquery", "1.6.0" );
 		</script>
 		<script src="js/jquery/jquery.cookie.js" type="text/javascript"></script>
 		
 		<script src="js/other/socket.io.js" type="text/javascript"></script>
  		<script src="js/other/json.js" type="text/javascript"></script>
-		
  		<script src="js/other/common.js" type="text/javascript"></script>
+ 		
+ 		<script src="js/util/Events.js" type="text/javascript"></script>
+ 		
  		<script src="js/communication/NetworkHandler.js" type="text/javascript"></script>
+ 		<script src="js/communication/NetworkHandlerSingleplayer.js" type="text/javascript"></script>
+ 		
+ 		<script src="js/game/geometry/Point.js" type="text/javascript"></script>
+ 		<script src="js/game/geometry/Vector.js" type="text/javascript"></script>
+ 		<script src="js/game/Curve.js" type="text/javascript"></script>
+ 		<script src="js/game/Drawer.js" type="text/javascript"></script>
+ 		<script src="js/game/World.js" type="text/javascript"></script>
+ 		<script src="js/game/Game.js" type="text/javascript"></script>
+ 		
  		<script src="js/setup/GameLobby.js" type="text/javascript"></script>
 	</head>
 	<body>
@@ -31,12 +42,13 @@
 			</div>
 			<div class="separator">&nbsp;</div>
 			<div class="col">
-				<a id="addPlayer" class="newplayer button box" href="JavaScript: gamelobby.addPlayer( );">Add Player</a>
-				<div class="players darkbox">
-					<ul id="playerlist">
-					</ul>
+				<div id="addPlayer-container">
+					<a id="addPlayer" class="addplayer button box" href="JavaScript: gamelobby.addLocalPlayer( );">Add Player</a>
 				</div>
-				<a id="start" class="start button box" href="JavaScript: gamelobby.voteStart( );">Start</a>
+				<div class="players darkbox">
+					<ul id="playerlist"></ul>
+				</div>
+				<a id="start" class="start button box" href="#">Start</a>
 			</div>
 			<div class="floatbreaker"></div>
 		</div>

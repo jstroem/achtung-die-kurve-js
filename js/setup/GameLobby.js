@@ -24,8 +24,6 @@ function GameLobby( domElements ) {
 			player = ( $.cookie( "player" ) ) ? JSON.parse( $.cookie( "player" ) ) : undefined,
 			gameInfo = host || join;
 		
-		alert(host);
-		alert(join);
 //		$.cookie( "host", null );
 //		$.cookie( "join", null );
 //		$.cookie( "player", null );
@@ -61,6 +59,48 @@ function GameLobby( domElements ) {
 					networkHandler.addObserver( "CURRENT PLAYERS", addPlayers );
 					networkHandler.send( { type: "CURRENT PLAYERS" } );
 				}
+			}
+		);
+		
+		// Initialize start-button
+		domElements.buttons.start.onclick = self.voteStart;
+		
+		// Add listeners, so that the Start-button stays updated
+		game.events.addListener( "START",
+			function( ) {
+				domElements.buttons.start.innerHTML = "Pause";
+				domElements.buttons.start.onclick = game.pause;
+			}
+		);
+		game.events.addListener( "PAUSE",
+			function( ) {
+				domElements.buttons.start.innerHTML = "Resume";
+				domElements.buttons.start.onclick = game.start;
+			}
+		);
+		game.events.addListener( "RESTART",
+			function( ) {
+				if ( domElements.buttons.start.innerHTML == "Start" ) {
+					$( domElements.buttons.addPlayer.parentNode ).animate(
+						{ height: "0px" },
+						{
+							duration: 300,
+							step: function( ) {
+								var height = $( domElements.playerlist.parentNode ).height();
+								$( domElements.playerlist.parentNode ).height( height + 1 ); 
+							}
+						}
+					);
+				}
+				
+				domElements.buttons.start.innerHTML = "Pause";
+				domElements.buttons.start.onclick = game.pause;
+			}
+		);
+		game.events.addListener( "END",
+			function( ) {
+				domElements.buttons.start.innerHTML = "Restart";
+				domElements.buttons.start.onclick = game.restart;
 			}
 		);
 	};
@@ -105,13 +145,13 @@ function GameLobby( domElements ) {
 	
 	this.addLocalPlayer = function( player, callback ) {
 		loadPlayer( player ,
-			function( ) {
-				localPlayers.push( player );
+			function( loadedPlayer ) {
+				localPlayers.push( loadedPlayer );
 				
-				addPlayers( player );
+				addPlayers( loadedPlayer );
 				
 				if ( typeof callback == "function" ) {
-					callback( player );
+					callback( loadedPlayer );
 				}
 			}
 		);
@@ -123,17 +163,18 @@ function GameLobby( domElements ) {
 	
 	function startGame( ) {
 		for ( var i = 0; i < localPlayers.length; i++ ) {
-			var randomPos = new Point( getRandom( 21, 480, true ), getRandom( 21, 480, true ) );
-			var randomDir = new Vector( getRandom( -1, 1, false ), getRandom( -1, 1, false ) ).normalize();
-			game.curves.push( new Curve( localPlayers[ i ].color, randomPos, randomDir, localPlayers[ i ].keys ) );
+			game.addCurve( new Curve( localPlayers[ i ].color, localPlayers[ i ].keys ) );
 		}
-		game.world.start( );
+		game.restart( );
 	}
 	
 	init( );
 }
 
 function loadPlayer( player, callback ) {
+	if ( !player ) {
+		player = {};
+	}
 	if ( !player.name ) {
 		player.nickname = prompt( "Choose a nickname." );
 	}
@@ -166,6 +207,6 @@ function loadPlayer( player, callback ) {
 			}
 		}, 100 );
 	} else {
-		callback( self );
+		callback( player );
 	}
 }

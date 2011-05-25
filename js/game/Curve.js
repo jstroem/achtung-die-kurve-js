@@ -5,7 +5,7 @@
  * @methods
  * 		-
  */
-function Curve( color, pos, dir, keys ) {
+function Curve( color, keys ) {
 	var self = this, // To be used in private-methods.
 		dirOptions = {
 			turnLeft: false,
@@ -13,11 +13,8 @@ function Curve( color, pos, dir, keys ) {
 			turningRadians: 0.05
 		};
 	
-	this.color = color,
-	this.pos = pos,
-	this.lastpos = new Point( -1, -1 ),
-	this.dir = dir,
-	this.isDead = false;
+	this.color = color;
+	this.pos, this.lastpos, this.dir, this.isDead, this.isInvisible;
 	
 	/**
 	 * @private
@@ -32,6 +29,26 @@ function Curve( color, pos, dir, keys ) {
 			keyPressHandler( false, getKeyCode( e ) );
 		}, false );
 	};
+	
+	this.refresh = function( pos, dir ) {
+		this.pos = pos;
+		this.lastpos = new Point( pos.row, pos.col );
+		this.dir = dir;
+
+		this.isDead = false;
+		this.isInvisible = true;
+		
+		toggleInvisibility();
+	};
+	
+	function toggleInvisibility( ) {
+		if ( !self.isDead ) {
+			self.isInvisible = !self.isInvisible;
+			
+			var delay = ( self.isInvisible ) ? getRandom( 125, 250, true ) : getRandom( 3000, 7000, true ) ;
+			window.setTimeout( toggleInvisibility, delay );
+		}
+	}
 	
 	/**
 	 * @private

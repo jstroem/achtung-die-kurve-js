@@ -25,7 +25,8 @@ div.game { height: 500px; text-align: center; width: 500px; }
 div.game canvas#game { border: 1px solid white; }
 
 div.players { height: 280px; padding: 0; width: 250px; }
-a.newplayer { height: 65px; padding-top: 35px; margin-bottom: 10px; }
+#addPlayer-container { height: 110px; margin-bottom: 10px; overflow: hidden; }
+a.addplayer { height: 65px; padding-top: 35px; }
 a.start { height: 65px; padding-top: 35px; margin-top: 10px; }
 
 /* Other */

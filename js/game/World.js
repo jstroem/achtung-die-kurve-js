@@ -12,12 +12,13 @@ function World ( game, networkHandler ) {
 		options = {
 			height: 500,
 			width: 500,
-			curveRadius: 2,
-			background: "#000000",
-			fps: 60
+			curveRadius: 2
 		},
-		blockedTiles = [],
-		pendingUpdates = [];
+		blockedTiles,
+		pendingUpdates = [],
+		interval;
+	
+	this.events;
 	
 	/**
 	 * @private
@@ -27,14 +28,12 @@ function World ( game, networkHandler ) {
 	 */
 	function init ( ) {
 		
+		// Initialize objects
+		self.events = new Events( );
+		
 		// Listen to updates
 		if ( networkHandler ) {
 			networkHandler.addObserver( "GAME UPDATE", handlePendingUpdates );
-		}
-		
-		// Initialize data structures
-		for ( var i = 0; i < options.height; i++ ) {
-			blockedTiles.push( [] ); // for each pixel in height: add array for a row
 		}
 		
 		// Initialize Canvas DOM
@@ -42,8 +41,17 @@ function World ( game, networkHandler ) {
 		game.drawer.setBackground( options.background );
 	};
 	
-	this.start = function( ) {
-		window.setInterval( run, 1000 / options.fps );
+	this.refresh = function( ) {
+		blockedTiles = [];
+		for ( var i = 0; i < options.height; i++ ) {
+			blockedTiles.push( [] ); // for each pixel in height: add array for a row
+		}
+		
+		for ( var i = 0; i < game.curves.length; i++ ) {
+			var randomPos = new Point( getRandom( 21, 480, true ), getRandom( 21, 480, true ) );
+			var randomDir = new Vector( getRandom( -1, 1, false ), getRandom( -1, 1, false ) ).normalize();
+			game.curves[ i ].refresh( randomPos, randomDir );
+		}
 	};
 	
 	/** 
@@ -51,13 +59,20 @@ function World ( game, networkHandler ) {
 	 * @method Is run on every redraw.
 	 * @return void
 	 */
-	function run ( ) {
+	this.run = function( ) {
+		if ( game.curves.length == 0 ) {
+			game.end( );
+			return;
+		}
+		
 		for ( var i = 0; i < game.curves.length; i++ ) {
 			var curve = game.curves[ i ];
 			curve.move( );
 			
 			if ( !isTileBlocked( curve.pos, curve.dir ) ) {
-				blockTile( curve.pos );
+				if ( !curve.isInvisible ) {
+					blockTile( curve.pos );
+				}
 			} else if ( !curve.pos.equals( curve.lastpos, false ) ) {
 				// Kill
 				game.killCurve( null, i );
@@ -76,13 +91,17 @@ function World ( game, networkHandler ) {
 	
 	function updateCanvas( curve, pos, lastpos, color, isDead ) {
 		if ( curve && curve != null ) {
+			if ( curve.isInvisible ) {
+				return;
+			}
+			
 			pos = curve.pos;
 			lastpos = curve.lastpos;
 			color = curve.color;
 			isDead = curve.isDead;
 		}
 		
-		if ( curve.isDead ) {
+		if ( isDead ) {
 			game.drawer.drawRectangle( pos, options.curveRadius + 4, options.curveRadius + 4, "white" );
 		} else {
 			game.drawer.drawCircle( lastpos, options.curveRadius, color );

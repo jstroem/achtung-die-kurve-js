@@ -110,7 +110,7 @@ function Lobby( domElements ) {
 				wallsOn: domElements.game.wallsOn.checked, // TODO: Add this parameter to the game
 				maxNoOfPlayers: domElements.game.maxNoOfPlayers.value
 			};
-
+		
 		$.cookie( "host", JSON.stringify( game ) );
 		document.location = "game.html";
 	};
