@@ -6,7 +6,6 @@ var achtungSocket = {
     onMessage: function ( msg ) {
         var client = this;
         if ( msg.type !== undefined && msg.type !== null ) {
-                console.log( "Message recived: "+ msg.type );
                 switch ( msg.type ) {
                     case "NEW PLAYER" :
                         achtungSocket.newPlayer( client, msg );
@@ -30,7 +29,7 @@ var achtungSocket = {
                         achtungSocket.createNewGame( client, msg );
                     break;
                     
-                    case "START" :
+                    case "VOTE START" :
                         achtungSocket.voteStart( client );
                     break;
                     
@@ -57,7 +56,6 @@ var achtungSocket = {
             //check if user is in use.
             if (msg.player.id !== undefined && msg.player.id !== null ) {
                 client.player = msg.player;
-                
             } else {
                 achtungSocket.sendErrorMessage( client, 1, "Player object was missing id" );   
             }
@@ -74,15 +72,20 @@ var achtungSocket = {
             var gamePlayers = achtungSocket.gamePlayers[ client.gameid ],
                 votes = gamePlayers.length;
                 
-            console.log(gamePlayers);
             if ( gamePlayers !== null && gamePlayers !== undefined ) {
                 for ( var i = 0; i < gamePlayers.length; i++ ) {
                     if ( gamePlayers[ i ].vote ) {
                         votes--;
                     }
                 }
+                console.log("Game start on votes: ", votes);
+                
                 if ( votes === 0 ) {
-                    achtungSocket.multicastMessage( gamePlayers, { type: "START" } );
+                    //If everyone has voted for start then send GAME START to everyone
+                    achtungSocket.multicastMessage( gamePlayers, { type: "START GAME" } );
+                } else {
+                    //Otherwise just inform the others that the player is now ready
+                    achtungSocket.multicastMessage( gamePlayers, { type: "VOTE START", player: client.player }, function( plr ) { return plr !== client; } );
                 }
             }
         }
@@ -95,9 +98,14 @@ var achtungSocket = {
                 game.noOfPlayers++;
                 client.gameid = msg.game.id;
                 client.vote = false;
-                client.player = msg.player;
-                achtungSocket.gamePlayers[ msg.game.id ].push( client );
-                
+                client.player = msg.player;                
+                var gamePlayers = achtungSocket.gamePlayers[ msg.game.id ];
+                gamePlayers.push( client );
+                achtungSocket.multicastMessage( gamePlayers, { type: "PLAYER JOINED", player: client.player }, function( plr ) { return plr !== client } );
+                //inform the other players
+                for ( var i = 0; i < gamePlayers.length; i++ ) {
+                    //if ( gamePlayers[ i ] !== client ) gamePlayers[ i ].send ( { type: "PLAYER JOINED", player { name
+                }
             } else {
                 achtungSocket.sendErrorMessage( client, 2, "Game is full" );
             }
@@ -113,7 +121,7 @@ var achtungSocket = {
             client.player = msg.player;
             client.vote = false;
             achtungSocket.games[ game.id ] = game;
-            console.log("new game", game);
+            
             achtungSocket.gamePlayers[ game.id ] = [ client ];
             achtungSocket.multicastMessage( achtungSocket.clients, 
                 { type: "ADD GAME", game: game },
@@ -139,9 +147,9 @@ var achtungSocket = {
         var availGames = [], gameid;
         for ( gameid in achtungSocket.games ) {
             console.log("Game", achtungSocket.games[ gameid ]);
-           // if ( achtungSocket.games[ gameid ].public === 1 ) {
+            if ( achtungSocket.games[ gameid ].public === 1 ) {
                 availGames.push( achtungSocket.games[ gameid ] );
-            //}
+            }
         }
         client.send ( { type: "CURRENT GAMES", games: availGames } );
     },
@@ -198,8 +206,10 @@ var achtungSocket = {
     
     onDisconnect: function ( client ) {
         if ( achtungSocket.isClientInGame( client ) ) {
-            achtungSocket.removeElementFromArray( achtungSocket.gamePlayeres[ client.gameid ], client );
-            if ( achtungSocket.gamePlayers[ client.gameid ].length === 0 ) {
+            var gamePlayers = achtungSocket.gamePlayers[ client.gameid ];
+            achtungSocket.removeElementFromArray( gamePlayers, client );
+            
+            if ( gamePlayers.length === 0 ) {
                 delete achtungSocket.gamePlayers[ client.gameid ];
                 delete achtungSocket.games[ client.gameid ];
                 achtungSocket.multicastMessage( achtungSocket.clients, 
@@ -208,6 +218,10 @@ var achtungSocket = {
                         return !achtungSocket.isClientInGame( client );
                     }   
                 );
+            } else {
+                //Send message to the others that the player has left
+                achtungSocket.games[ client.gameid ].noOfPlayers--;
+                achtungSocket.multicastMessage( achtungSocket.clients, { type: "PLAYER LEAVED", player: client.player } );
             }
         }
         achtungSocket.removeElementFromArray( achtungSocket.clients, client );

@@ -158,7 +158,7 @@ function GameLobby( domElements ) {
 	};
 	
 	this.voteStart = function( ) {
-		networkHandler.send( { type: "START" } );
+		networkHandler.send( { type: "VOTE START" } );
 	};
 	
 	function startGame( ) {

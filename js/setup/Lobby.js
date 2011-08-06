@@ -24,6 +24,11 @@ function Lobby( domElements ) {
 	function init( ) {
 		// Initialize objects
 		networkHandler = new NetworkHandler( );
+        
+        //empties the cookie so no games where saved
+        $.cookie( "host", null );
+        $.cookie( "join", null );
+        $.cookie( "player", null );
 		
 		// Add observers
 		networkHandler.addObserver( "CURRENT GAMES", initGames );
