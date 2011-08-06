@@ -17,13 +17,14 @@ function NetworkHandler( ) {
 	 */
 	function init( ) {
 		// Initialize socket
-		socket = new io.Socket( "http://jstroem.com:8998",
+		socket = new io.Socket( "jstroem.com",
 			{
 				port: port,
 				rememberTransport: false
 			}
 		);
 		socket.connect( );
+        console.log(socket);
 		socket.on(
 			'message',
 			function ( obj ) {
