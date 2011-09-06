@@ -18,17 +18,20 @@
 	<script src="javascripts/libs/modernizr-2.0.6.min.js"></script>
 
     <!-- Loads jQuery -->
-    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+    <script src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
 		google.load( "jquery", "1.6.0" );
 	</script>
-	<script src="js/jquery/jquery.cookie.js" type="text/javascript"></script>
+	<script src="javascripts/jquery/jquery.cookie.js"></script>
 	
-    <script src="javascripts/other/socket.io.js" type="text/javascript"></script>
- 	<script src="javascripts/other/json.js" type="text/javascript"></script>
- 	<script src="javascripts/other/common.js" type="text/javascript"></script>
-    <script src="javascripts/communication/NetworkHandler.js" type="text/javascript"></script>
-	<script src="javascripts/setup/Lobby.js" type="text/javascript"></script>
+    <script src="/socket.io/socket.io.js"></script>
+ 	<script src="javascripts/other/json.js"></script>
+ 	<script src="javascripts/other/common.js"></script>
+    <script src="javascripts/communication/NetworkHandler.js"></script>
+    <% for(var i = 0; i < javascripts.length; i++){ %>
+    <script src="<%= javascripts[i] %>"></script>
+    <% } %>
+	<script src="javascripts/setup/Lobby.js"></script>
 </head>
 <body>
 

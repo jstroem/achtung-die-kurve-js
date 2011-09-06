@@ -210,9 +210,9 @@ body { background: black; color: black; font-family: 'Tahoma'; }
 .box { background: #6e6e6e; }
 .darkbox { background: #1e1e1e; }
 
-div.container { margin: 10px auto; width: 800px; }
-div.container div.col { float: left; }
-div.container div.separator { float: left; width: 10px; }
+.container { margin: 10px auto; width: 800px; }
+.container div.col { float: left; }
+.container div.separator { float: left; width: 10px; }
 div.floatbreaker { clear: both; }
 
 /* Lobby */

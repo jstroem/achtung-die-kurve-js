@@ -1,2 +1,65 @@
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<div id="lobby">
+	<div class="container">
+		<div class="user box">
+			<label for="field_name_nick">Choose a nickname:</label>
+			<input id="field_name_nick" name="name_nick" type="text" value="Player" />
+		</div>
+	</div>
+	<div class="container">
+		<div class="col">
+			<h2>Open games</h2>
+			<div class="games darkbox">
+				<ul id="gamelist"></ul>
+			</div>
+		</div>
+		<div class="separator">&nbsp;</div>
+		<div class="col">
+			<h2>Host game</h2>
+			<div class="host box">
+				<div>
+					<input id="field_options_singleplayer" name="options_singleplayer" type="checkbox" />
+					<label for="field_options_singleplayer">Singleplayer</label>
+				</div>
+				<div>
+					<input id="field_options_walls" name="options_walls" type="checkbox" />
+					<label for="field_options_walls">Walls on</label>
+				</div>
+				<div id="multiplayer_options">
+					<div>
+						<label for="field_name_game">Choose a gamename:</label>
+						<input id="field_name_game" name="name_game" type="text" value="Player's game" />
+					</div>
+					<div>
+						<label for="field_options_maxplayers">Max. number of players:</label>
+						<input id="field_options_maxplayers" name="options_maxplayers" type="text" value="6" />
+					</div>
+				</div>
+				<script type="text/javascript">
+					document.getElementById("field_options_singleplayer").onclick = function() {
+						document.getElementById("multiplayer_options").style.display = ( this.checked ) ? "none" : "block";
+					};
+				</script>
+			</div>
+			<a class="host button box" href="JavaScript: lobby.host( );">Host New Game</a>
+		</div>
+		<div class="floatbreaker"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	var lobby = new Lobby(
+		{
+			gamelist: document.getElementById( "gamelist" ),
+			player:
+				{
+					name: document.getElementById( "field_name_nick" ) 
+				},
+			game:
+				{
+					name: document.getElementById( "field_name_game" ),
+					singleplayer: document.getElementById( "field_options_singleplayer" ),
+					wallsOn: document.getElementById( "field_options_walls" ),
+					maxNoOfPlayers: document.getElementById( "field_options_maxplayers" )
+				}
+		}
+	);
+ </script>

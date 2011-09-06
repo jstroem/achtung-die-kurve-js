@@ -18,6 +18,7 @@ var achtungSocket = {
                     break;
                     
                     case "CURRENT GAMES" :
+                        console.log("Current games");
                         achtungSocket.sendCurrentGames( client );
                     break;
                     

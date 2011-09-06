@@ -117,14 +117,14 @@ function Lobby( domElements ) {
 			};
 		
 		$.cookie( "host", JSON.stringify( game ) );
-		document.location = "game.html";
+		document.location = "game";
 	};
 	
 	this.join = function( gameId ) {
 		registerPlayer( );
 		
 		$.cookie( "join", JSON.stringify( { id: gameId } ) );
-		document.location = "game.html";
+		document.location = "game";
 	};
 	
 	init ( );

@@ -1,4 +1,5 @@
-var port = 8998;
+var port = 8991;
+var host = "jstroem.com";
 
 /**
  * @author Jesper & Christoffer
@@ -17,13 +18,7 @@ function NetworkHandler( ) {
 	 */
 	function init( ) {
 		// Initialize socket
-		socket = new io.Socket( "jstroem.com",
-			{
-				port: port,
-				rememberTransport: false
-			}
-		);
-		socket.connect( );
+		socket = io.connect( host + ":" + port );
         console.log(socket);
 		socket.on(
 			'message',

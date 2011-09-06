@@ -1,0 +1,31 @@
+<div id="gamecontainer" class="container">
+	<div class="col">
+		<div class="game box">
+			<canvas id="game"></canvas>
+		</div>
+	</div>
+	<div class="separator">&nbsp;</div>
+	<div class="col">
+		<div id="addPlayer-container">
+			<a id="addPlayer" class="addplayer button box" href="JavaScript: gamelobby.addLocalPlayer( );">Add Player</a>
+		</div>
+		<div class="players darkbox">
+			<ul id="playerlist"></ul>
+		</div>
+		<a id="start" class="start button box" href="#">Start</a>
+	</div>
+	<div class="floatbreaker"></div>
+</div>
+<script type="text/javascript">
+	var gamelobby = new GameLobby(
+		{
+			game: document.getElementById( "game" ),
+			playerlist: document.getElementById( "playerlist" ),
+			buttons:
+				{
+					addPlayer: document.getElementById( "addPlayer" ),
+					start: document.getElementById( "start" )
+				}
+		}
+	);
+</script>

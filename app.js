@@ -4,8 +4,9 @@
  */
 
 var express = require('express');
-
 var app = module.exports = express.createServer();
+var io = require('socket.io');
+var port = 8991;
 
 // Configuration
 
@@ -15,9 +16,8 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
-  app.use(express.favicon());
+  app.use(express.session({secret: 'secret', key: 'express.sid'}));
   app.use(express.static(__dirname + '/public'));
-//  app.use(express.session({ secret: 'your secret here' }));
   app.use(app.router);
 });
 
@@ -38,13 +38,37 @@ app.use(function(err, req, res, next){
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+        javascripts: ['javascripts/setup/Lobby.js']
   });
+});
+
+app.get('/game', function(req, res) {
+    res.render('game', {
+        javascripts: [  'javascripts/util/Events.js',
+                        'javascripts/communication/NetworkHandlerSingleplayer.js',
+                        'javascripts/game/geometry/Point.js',
+                        'javascripts/game/geometry/Vector.js',
+                        'javascripts/game/Curve.js',
+                        'javascripts/game/Drawer.js',
+                        'javascripts/game/World.js',
+                        'javascripts/game/Game.js',
+                        'javascripts/setup/GameLobby.js']
+    });
 });
 
 app.get('/404', function(req, res, next){
   next();
 });
 
-app.listen(8991);
+app.listen( port );
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+
+sio = io.listen( app );
+sio.set( 'log level', 1 );
+
+//Read in the achtung socket class
+require.paths.unshift( __dirname );
+var achtungSocket = require( 'AchtungSocket' );
+
+sio.sockets.on( 'connection', achtungSocket.onConnect );
