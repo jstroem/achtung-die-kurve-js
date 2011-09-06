@@ -3,10 +3,10 @@
 
 
 /* TEAM */
-  <your title>: <your name>
-  Site: 
-  Twitter: 
-  Location: 
+  Developers: Jesper Lindstrøm Nielsen And Christoffer Quist Adamsen
+  Site: www.jstroem.com 
+  Twitter: jlindstroem
+  Location: Denmark
 
 /* THANKS */
   Names (& URL): 

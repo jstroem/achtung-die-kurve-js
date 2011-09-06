@@ -198,14 +198,59 @@ table { border-collapse: collapse; border-spacing: 0; }
 
 /* =============================================================================
    Primary styles
-   Author: 
+   Author: Jesper Lindstrøm Nielsen And Christoffer Quist Adamsen
    ========================================================================== */
 
 
+body { background: black; color: black; font-family: 'Tahoma'; }
 
+/* General */
 
+.box, .darkbox { border-radius: 5px; padding: 10px; }
+.box { background: #6e6e6e; }
+.darkbox { background: #1e1e1e; }
 
+div.container { margin: 10px auto; width: 800px; }
+div.container div.col { float: left; }
+div.container div.separator { float: left; width: 10px; }
+div.floatbreaker { clear: both; }
 
+/* Lobby */
+
+div.games { height: 220px; padding: 0; width: 440px; }
+a.join { height: 135px; padding-top: 75px; width: 90px; }
+
+div.host { height: 80px; width: 330px; }
+a.host { height: 65px; padding-top: 35px; margin-top: 10px; }
+
+/* Game */
+
+div.game { height: 500px; text-align: center; width: 500px; }
+div.game canvas#game { border: 1px solid white; }
+
+div.players { height: 280px; padding: 0; width: 250px; }
+#addPlayer-container { height: 110px; margin-bottom: 10px; overflow: hidden; }
+a.addplayer { height: 65px; padding-top: 35px; }
+a.start { height: 65px; padding-top: 35px; margin-top: 10px; }
+
+/* Other */
+
+h1, h2 { color: white; text-transform: uppercase; }
+
+a { color: black; font-weight: bold; text-decoration: none; }
+a.button { background: #3e3e3e; color: white; display: block; font-size: 30px; text-align: center; text-transform: uppercase; }
+a.button:hover { background: white; color: black; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+ul li { border-radius: 2px; margin: 1px 0; }
+ul li a { display: block; padding: 5px 10px; }
+ul li.odd { background: #6e6e6e; }
+ul li.even { background: #4e4e4e; }
+ul li:hover { background: white; }
+
+label { font-weight: bold; }
+input { background: #9e9e9e; border: 1px solid black; font-family: 'Tahoma'; font-size: 11px; font-weight: bold; }
+input:hover { background: white; }
 
 
 /* =============================================================================
