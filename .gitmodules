@@ -7,3 +7,6 @@
 [submodule "node_modules/nodeunit"]
 	path = node_modules/nodeunit
 	url = https://github.com/caolan/nodeunit.git
+[submodule "node_modules/connect"]
+	path = node_modules/connect
+	url = https://github.com/senchalabs/connect.git
