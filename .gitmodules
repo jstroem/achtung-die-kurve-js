@@ -1,0 +1,12 @@
+[submodule "node_modules/nodeunit"]
+	path = node_modules/nodeunit
+	url = git://github.com/caolan/nodeunit.git
+[submodule "node_modules/socket.io"]
+	path = node_modules/socket.io
+	url = git://github.com/LearnBoost/socket.io.git
+[submodule "node_modules/express"]
+	path = node_modules/express
+	url = git://github.com/visionmedia/express.git
+[submodule "node_modules/ejs"]
+	path = node_modules/ejs
+	url = git://github.com/visionmedia/ejs.git

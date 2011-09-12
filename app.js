@@ -70,5 +70,11 @@ sio.set( 'log level', 1 );
 //Read in the achtung socket class
 require.paths.unshift( __dirname );
 var achtungSocket = require( 'AchtungSocket' );
+var Lobby = require( 'Lobby' );
+var GameServer = require( 'GameServer' );
+
+Lobby.setGameServer( GameServer );
+
+sio.of('/lobby').on('connection', Lobby.onConnection );
 
 sio.sockets.on( 'connection', achtungSocket.onConnect );
